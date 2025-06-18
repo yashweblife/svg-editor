@@ -1,4 +1,4 @@
-import { c, canvas, canvas_background, EventMap, grid_dots, helper_line_color, mouse, settings } from "./lib";
+import { c, canvas, canvas_background, distance, EventMap, grid_dots, helper_line_color, mouse, settings } from "./lib";
 import "./styles/common.css";
 import { basic_object, tool_types } from "./types";
 
@@ -78,8 +78,8 @@ function handleCanvasClick(e: MouseEvent) {
         let pointB = { x: e.offsetX, y: e.offsetY };
         if (current_object.paths.length > 1) {
           let pointA = current_object.paths[0];
-          let distance = Math.sqrt((pointB.x - pointA.x) * (pointB.x - pointA.x) + (pointB.y - pointA.y) * (pointB.y - pointA.y));
-          if (distance < 10) {
+          const dist = distance(pointB, pointA);
+          if (dist < 10) {
             console.log("FINISHING: ", current_object.paths)
             current_object.paths.push(pointA);
             objects.push(current_object);
@@ -116,7 +116,6 @@ function handleCanvasClick(e: MouseEvent) {
   }
 }
 
-
 function clearCanvas() {
   c.fillStyle = canvas_background;
   c.fillRect(0, 0, canvas.width, canvas.height);
@@ -134,12 +133,11 @@ function drawGrid() {
 }
 function drawHelperGuides() {
   if (current_action === "draw" && objects.length > 0) {
-
     let closest_object = objects[0];
-    let closest_distance = Math.sqrt((mouse.x - closest_object.x) * (mouse.x - closest_object.x) + (mouse.y - closest_object.y) * (mouse.y - closest_object.y));
+    let closest_distance = distance(mouse, closest_object);
     for (let i = 0; i < objects.length; i++) {
       let b = { x: objects[i].x, y: objects[i].y, rx: objects[i].rx, ry: objects[i].ry };
-      let distance1 = Math.sqrt((mouse.x - b.x) * (mouse.x - b.x) + (mouse.y - b.y) * (mouse.y - b.y));
+      let distance1 = distance(mouse, b);
       if (distance1 < closest_distance) {
         closest_distance = distance1;
         closest_object = objects[i];
@@ -152,13 +150,12 @@ function drawHelperGuides() {
     c.stroke();
     c.closePath();
     c.strokeStyle = grid_dots;
-
   }
 }
 function drawPhantomObject() {
   if (current_action === "draw" && current_object != null) {
     if (current_tool === "circle") {
-      const dist = Math.sqrt((mouse.x - current_object.x) ** 2 + (mouse.y - current_object.y) ** 2);
+      const dist = distance(mouse, current_object);
       c.beginPath();
       c.arc(current_object.x, current_object.y, dist, 0, 2 * Math.PI);
       c.stroke();
@@ -200,7 +197,7 @@ function drawObjects() {
     c.beginPath();
     const o = objects[i];
     if (objects[i].type === "circle") {
-      const dist = Math.sqrt((o.x - o.rx) ** 2 + (o.y - o.ry) ** 2);
+      const dist = distance(o, mouse);
       c.arc(o.x, o.y, dist, 0, 2 * Math.PI);
       c.stroke();
     }
