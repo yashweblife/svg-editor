@@ -1,33 +1,16 @@
-import EventMap from "./lib/Events";
+import { c, canvas, canvas_background, EventMap, mouse, settings } from "./lib";
 import "./styles/common.css";
-import { action_types, basic_object, tool_types } from "./types";
+import { basic_object, tool_types } from "./types";
 
 
-
-const canvas = document.createElement("canvas") as HTMLCanvasElement;
 const circleButton = document.querySelector("#circle") as HTMLButtonElement;
-const c = canvas.getContext("2d") as CanvasRenderingContext2D;
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-(document.querySelector("#app") as HTMLDivElement).appendChild(canvas);
-const canvas_background = "rgb(18,18,18)";
-
-
-let current_tool: tool_types = "circle";
-let current_action: action_types = "none";
-let current_object: null | basic_object = null;
-
-
-const mouse = {
-  x: 0,
-  y: 0,
-  click: false,
-}
+let { current_tool, current_action, current_object } = settings;
 const circleClickEvent = EventMap<MouseEvent>(circleButton, "click", [handleSelectCircle]);
 const canvasClickEvent = EventMap<MouseEvent>(canvas, "click", [handleCanvasClick]);
 const resizeEvent = EventMap<Event>(window, "resize", [resizeWindow]);
 const keyDoenEvent = EventMap<KeyboardEvent>(window, "keydown", [handleEscapeKey, handleHotKeyDraw]);
 const canvasMouseMoveEvent = EventMap<MouseEvent>(canvas, "mousemove", [handleCanvasMouseMove]);
+const objects: basic_object[] = [];
 
 function handleCanvasMouseMove(e: MouseEvent) {
   mouse.x = e.offsetX;
@@ -38,7 +21,7 @@ function resizeWindow() {
   canvas.height = window.innerHeight;
 }
 function handleEscapeKey(e: KeyboardEvent) {
-  e.preventDefault();
+  // e.preventDefault();
   if (e.key === "Escape") {
     if (current_action === "draw") {
       current_tool = "none";
@@ -131,7 +114,6 @@ function handleCanvasClick(e: MouseEvent) {
     }
   }
 }
-const objects: basic_object[] = [];
 
 function animation() {
   requestAnimationFrame(animation);
