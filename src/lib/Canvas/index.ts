@@ -14,6 +14,10 @@ const canvas = document.createElement("canvas") as HTMLCanvasElement;
 const c = canvas.getContext("2d") as CanvasRenderingContext2D;
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+
 const canvas_background = "rgb(18,18,18)";
+const grid_dots = "rgba(255,255,255,0.1)";
+const helper_line_color ="rgba(166, 105, 105, 0.68)";
+
 (document.querySelector("#app") as HTMLDivElement).appendChild(canvas);
-export { c, canvas, canvas_background };
+export { c, canvas, canvas_background, grid_dots, helper_line_color };
