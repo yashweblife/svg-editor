@@ -2,16 +2,16 @@ import { c, canvas, canvas_background, distance, EventMap, grid_dots, helper_lin
 import "./styles/common.css";
 import { basic_object, tool_types } from "./types";
 
-
 const circleButton = document.querySelector("#circle") as HTMLButtonElement;
+const objects: basic_object[] = [];
+
 let { current_tool, current_action, current_object } = settings;
 
-const circleClickEvent = EventMap<MouseEvent>(circleButton, "click", [handleSelectCircle]);
-const canvasClickEvent = EventMap<MouseEvent>(canvas, "click", [handleCanvasClick]);
-const resizeEvent = EventMap<Event>(window, "resize", [resizeWindow]);
-const keyDoenEvent = EventMap<KeyboardEvent>(window, "keydown", [handleEscapeKey, handleHotKeyDraw]);
-const canvasMouseMoveEvent = EventMap<MouseEvent>(canvas, "mousemove", [handleCanvasMouseMove]);
-const objects: basic_object[] = [];
+EventMap<MouseEvent>(circleButton, "click", [handleSelectCircle]);
+EventMap<MouseEvent>(canvas, "click", [handleCanvasClick]);
+EventMap<Event>(window, "resize", [resizeWindow]);
+EventMap<KeyboardEvent>(window, "keydown", [handleEscapeKey, handleHotKeyDraw]);
+EventMap<MouseEvent>(canvas, "mousemove", [handleCanvasMouseMove]);
 
 function handleCanvasMouseMove(e: MouseEvent) {
   mouse.x = e.offsetX;
@@ -37,14 +37,22 @@ function handleEscapeKey(e: KeyboardEvent) {
 function handleHotKeyDraw(e: KeyboardEvent) {
   // e.preventDefault();
   let isValidKey: tool_types = "none"
-  if (e.key === "c") {
-    isValidKey = "circle"
-  } else if (e.key === "r") {
-    isValidKey = "rectangle"
-  } else if (e.key === "l") {
-    isValidKey = "line"
-  } else if (e.key === "p") {
-    isValidKey = "path"
+  switch ((e.key).toLowerCase()) {
+    case "c":
+      isValidKey = "circle"
+      break;
+    case "r":
+      isValidKey = "rectangle"
+      break;
+    case "l":
+      isValidKey = "line"
+      break;
+    case "p":
+      isValidKey = "path"
+      break;
+    default:
+      isValidKey = "none"
+      break
   }
   if (isValidKey !== "none") {
     current_tool = isValidKey;
@@ -61,7 +69,6 @@ function handleSelectCircle() {
 function handleCanvasClick(e: MouseEvent) {
   if (current_action === "draw" && current_tool !== "none") {
     if (current_tool === "path") {
-      console.log("path")
       if (current_object == null) {
         current_object = {
           x: 0,
@@ -71,7 +78,6 @@ function handleCanvasClick(e: MouseEvent) {
           paths: [{ x: e.offsetX, y: e.offsetY }],
           type: current_tool
         }
-        console.log("ADDED:", current_object)
         return
       }
       if (current_object.paths) {
@@ -80,7 +86,6 @@ function handleCanvasClick(e: MouseEvent) {
           let pointA = current_object.paths[0];
           const dist = distance(pointB, pointA);
           if (dist < 10) {
-            console.log("FINISHING: ", current_object.paths)
             current_object.paths.push(pointA);
             objects.push(current_object);
             current_object = null;
@@ -90,7 +95,6 @@ function handleCanvasClick(e: MouseEvent) {
           }
           current_object.paths.push(pointB);
         } else {
-          console.log("CONTINUING: ", current_object.paths)
           current_object.paths.push(pointB);
         }
       }
@@ -154,76 +158,71 @@ function drawHelperGuides() {
 }
 function drawPhantomObject() {
   if (current_action === "draw" && current_object != null) {
-    if (current_tool === "circle") {
-      const dist = distance(mouse, current_object);
-      c.beginPath();
-      c.arc(current_object.x, current_object.y, dist, 0, 2 * Math.PI);
-      c.stroke();
-      c.closePath();
-    } else if (current_tool === "rectangle") {
-      c.beginPath();
-      c.rect(current_object.x, current_object.y, mouse.x - current_object.x, mouse.y - current_object.y);
-      c.stroke();
-      c.closePath();
-    } else if (current_tool === "line") {
-      c.beginPath();
-      c.moveTo(current_object.x, current_object.y);
-      c.lineTo(mouse.x, mouse.y);
-      c.stroke();
-      c.closePath();
-    } else if (current_tool === "path") {
-      if (current_object.paths) {
-        let prev = current_object.paths[0];
-        for (let i = 1; i < current_object.paths.length; i++) {
+    const dist = distance(mouse, current_object);
+    c.beginPath();
+    switch (current_tool) {
+      case "circle":
+        c.arc(current_object.x, current_object.y, dist, 0, 2 * Math.PI);
+        break;
+      case "rectangle":
+        c.rect(current_object.x, current_object.y, mouse.x - current_object.x, mouse.y - current_object.y);
+        break;
+      case "line":
+        c.moveTo(current_object.x, current_object.y);
+        c.lineTo(mouse.x, mouse.y);
+        break;
+      case "path":
+        if (current_object.paths) {
+          let prev = current_object.paths[0];
           c.beginPath();
-          c.moveTo(prev.x, prev.y);
-          c.lineTo(current_object.paths[i].x, current_object.paths[i].y);
-          prev = current_object.paths[i];
+          for (let i = 1; i < current_object.paths.length; i++) {
+            c.moveTo(prev.x, prev.y);
+            c.lineTo(current_object.paths[i].x, current_object.paths[i].y);
+            prev = current_object.paths[i];
+            c.stroke();
+          }
+          let p = current_object.paths[current_object.paths.length - 1]
+          c.moveTo(p.x, p.y);
+          c.lineTo(mouse.x, mouse.y);
           c.stroke();
           c.closePath();
         }
-        c.beginPath();
-        let p = current_object.paths[current_object.paths.length - 1]
-        c.moveTo(p.x, p.y);
-        c.lineTo(mouse.x, mouse.y);
-        c.stroke();
-        c.closePath();
-      }
+        break;
     }
+    c.stroke();
+    c.closePath();
   }
 }
 function drawObjects() {
   for (let i = 0; i < objects.length; i++) {
     c.beginPath();
     const o = objects[i];
-    if (objects[i].type === "circle") {
-      const dist = distance(o, mouse);
-      c.arc(o.x, o.y, dist, 0, 2 * Math.PI);
-      c.stroke();
+    const dist = distance({ x: o.x, y: o.y }, { x: o.rx, y: o.ry });
+    switch (o.type) {
+      case "circle":
+        c.arc(o.x, o.y, dist, 0, 2 * Math.PI);
+        break;
+      case "rectangle":
+        c.rect(o.x, o.y, o.rx - o.x, o.ry - o.y);
+        break;
+      case "line":
+        c.moveTo(o.x, o.y);
+        c.lineTo(o.rx, o.ry);
+        break;
+      case "path":
+        const paths = o.paths;
+        if (!paths || paths.length === 0) {
+          continue;
+        }
+        let prev = paths[0];
+        for (let i = 1; i < paths.length; i++) {
+          c.moveTo(prev.x, prev.y);
+          c.lineTo(paths[i].x, paths[i].y);
+          prev = paths[i];
+        }
+        break;
     }
-    else if (objects[i].type === "rectangle") {
-      c.rect(o.x, o.y, o.rx - o.x, o.ry - o.y);
-      c.stroke();
-    }
-    else if (objects[i].type === "line") {
-      c.moveTo(o.x, o.y);
-      c.lineTo(o.rx, o.ry);
-      c.stroke();
-    }
-    else if (objects[i].type === "path") {
-      c.beginPath();
-      const paths = o.paths;
-      if (!paths || paths.length === 0) {
-        continue;
-      }
-      let prev = paths[0];
-      for (let i = 1; i < paths.length; i++) {
-        c.moveTo(prev.x, prev.y);
-        c.lineTo(paths[i].x, paths[i].y);
-        prev = paths[i];
-      }
-      c.stroke();
-    }
+    c.stroke();
     c.closePath();
   }
 }
