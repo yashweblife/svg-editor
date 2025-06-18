@@ -1,15 +1,43 @@
 import "./styles/common.css";
+import { action_types, tool_types } from "./types";
+
+
+
 const canvas = document.createElement("canvas") as HTMLCanvasElement;
+const circleButton = document.querySelector("#circle") as HTMLButtonElement;
 const c = canvas.getContext("2d") as CanvasRenderingContext2D;
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 (document.querySelector("#app") as HTMLDivElement).appendChild(canvas);
+const canvas_background = "rgb(18,18,18)";
+
+
+let current_tool: tool_types = "circle";
+let current_action: action_types = "none";
+
+
 window.addEventListener("resize", () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 })
+window.addEventListener("keypress", (e: KeyboardEvent) => {
+  if(e.key === "Escape"){
+    if(current_action === "draw"){
+      current_tool = "none";
+      current_action = "none";
+    }
+    current_action = "none";
+  }
+})
+circleButton.addEventListener('click',()=>{
+  current_tool = "circle";
+  current_action = "draw";
+})
 
-const canvas_background = "rgb(18,18,18)";
+
+
+
+
 function animation(){
   requestAnimationFrame(animation);
   c.fillStyle = canvas_background;
