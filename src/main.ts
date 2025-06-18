@@ -84,7 +84,6 @@ function handleCanvasClick(e: MouseEvent) {
       current_object.rx = e.offsetX;
       current_object.ry = e.offsetY;
       objects.push(current_object);
-      console.log(current_object)
       current_object = null;
       current_action = "none";
       current_tool = "none";
