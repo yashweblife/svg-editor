@@ -9,3 +9,11 @@ export default class Canvas {
         (document.querySelector("#app") as HTMLDivElement).appendChild(this.canvas);
     }
 }
+
+const canvas = document.createElement("canvas") as HTMLCanvasElement;
+const c = canvas.getContext("2d") as CanvasRenderingContext2D;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+const canvas_background = "rgb(18,18,18)";
+(document.querySelector("#app") as HTMLDivElement).appendChild(canvas);
+export { c, canvas, canvas_background };
