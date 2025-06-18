@@ -1,10 +1,11 @@
-import { c, canvas, canvas_background, EventMap, mouse, settings } from "./lib";
+import { c, canvas, canvas_background, EventMap, grid_dots, helper_line_color, mouse, settings } from "./lib";
 import "./styles/common.css";
 import { basic_object, tool_types } from "./types";
 
 
 const circleButton = document.querySelector("#circle") as HTMLButtonElement;
 let { current_tool, current_action, current_object } = settings;
+
 const circleClickEvent = EventMap<MouseEvent>(circleButton, "click", [handleSelectCircle]);
 const canvasClickEvent = EventMap<MouseEvent>(canvas, "click", [handleCanvasClick]);
 const resizeEvent = EventMap<Event>(window, "resize", [resizeWindow]);
@@ -115,11 +116,13 @@ function handleCanvasClick(e: MouseEvent) {
   }
 }
 
-function animation() {
-  requestAnimationFrame(animation);
+
+function clearCanvas() {
   c.fillStyle = canvas_background;
   c.fillRect(0, 0, canvas.width, canvas.height);
-  c.strokeStyle = "rgba(255,255,255,0.1)";
+}
+function drawGrid() {
+  c.strokeStyle = grid_dots;
   for (let i = 10; i < window.innerWidth + 100; i += 50) {
     for (let j = 10; j < window.innerHeight + 100; j += 50) {
       c.beginPath();
@@ -128,27 +131,31 @@ function animation() {
       c.closePath();
     }
   }
+}
+function drawHelperGuides() {
   if (current_action === "draw" && objects.length > 0) {
-    
-      let closest_object = objects[0];
-      let closest_distance = Math.sqrt((mouse.x - closest_object.x) * (mouse.x - closest_object.x) + (mouse.y - closest_object.y) * (mouse.y - closest_object.y));
-      for (let i = 0; i < objects.length; i++) {
-        let b = { x: objects[i].x, y: objects[i].y, rx: objects[i].rx, ry: objects[i].ry };
-        let distance1 = Math.sqrt((mouse.x - b.x) * (mouse.x - b.x) + (mouse.y - b.y) * (mouse.y - b.y));
-        if (distance1 < closest_distance) {
-          closest_distance = distance1;
-          closest_object = objects[i];
-        }
+
+    let closest_object = objects[0];
+    let closest_distance = Math.sqrt((mouse.x - closest_object.x) * (mouse.x - closest_object.x) + (mouse.y - closest_object.y) * (mouse.y - closest_object.y));
+    for (let i = 0; i < objects.length; i++) {
+      let b = { x: objects[i].x, y: objects[i].y, rx: objects[i].rx, ry: objects[i].ry };
+      let distance1 = Math.sqrt((mouse.x - b.x) * (mouse.x - b.x) + (mouse.y - b.y) * (mouse.y - b.y));
+      if (distance1 < closest_distance) {
+        closest_distance = distance1;
+        closest_object = objects[i];
       }
-      c.beginPath();
-      c.arc(closest_object.x, closest_object.y, 2, 0, 2 * Math.PI);
-      c.rect(closest_object.x, closest_object.y, mouse.x - closest_object.x, mouse.y - closest_object.y);
-      c.strokeStyle = "rgba(166, 105, 105, 0.68)";
-      c.stroke();
-      c.closePath();
-      c.strokeStyle = "rgba(255,255,255,0.1)";
-    
+    }
+    c.beginPath();
+    c.arc(closest_object.x, closest_object.y, 2, 0, 2 * Math.PI);
+    c.rect(closest_object.x, closest_object.y, mouse.x - closest_object.x, mouse.y - closest_object.y);
+    c.strokeStyle = helper_line_color;
+    c.stroke();
+    c.closePath();
+    c.strokeStyle = grid_dots;
+
   }
+}
+function drawPhantomObject() {
   if (current_action === "draw" && current_object != null) {
     if (current_tool === "circle") {
       const dist = Math.sqrt((mouse.x - current_object.x) ** 2 + (mouse.y - current_object.y) ** 2);
@@ -187,6 +194,8 @@ function animation() {
       }
     }
   }
+}
+function drawObjects() {
   for (let i = 0; i < objects.length; i++) {
     c.beginPath();
     const o = objects[i];
@@ -220,6 +229,15 @@ function animation() {
     }
     c.closePath();
   }
+}
+
+function animation() {
+  requestAnimationFrame(animation);
+  clearCanvas();
+  drawGrid();
+  drawHelperGuides();
+  drawPhantomObject();
+  drawObjects();
 }
 
 animation();
