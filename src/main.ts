@@ -126,6 +126,20 @@ function clearCanvas() {
 }
 function drawGrid() {
   c.strokeStyle = grid_dots;
+  const center = {
+    x: window.innerWidth / 2,
+    y: window.innerHeight / 2
+  }
+  c.beginPath();
+  c.moveTo(center.x, 0);
+  c.lineTo(center.x, window.innerHeight);
+  c.stroke();
+  c.closePath();
+  c.beginPath();
+  c.moveTo(0, center.y);
+  c.lineTo(window.innerWidth, center.y);
+  c.stroke();
+  c.closePath();
   for (let i = 10; i < window.innerWidth + 100; i += 50) {
     for (let j = 10; j < window.innerHeight + 100; j += 50) {
       c.beginPath();
@@ -134,6 +148,19 @@ function drawGrid() {
       c.closePath();
     }
   }
+}
+function drawMouseTool() {
+  const dist = distance(mouse, { x: window.innerWidth / 2, y: window.innerHeight / 2 });
+  const pos = { ...mouse }
+  if (dist < 20) {
+    mouse.x = window.innerWidth / 2;
+    mouse.y = window.innerHeight / 2
+  }
+  c.beginPath();
+  c.arc(pos.x, pos.y, 5, 0, 2 * Math.PI);
+  c.strokeStyle = helper_line_color;
+  c.stroke();
+  c.closePath();
 }
 function drawHelperGuides() {
   if (current_action === "draw" && objects.length > 0) {
@@ -231,6 +258,7 @@ function animation() {
   requestAnimationFrame(animation);
   clearCanvas();
   drawGrid();
+  drawMouseTool();
   drawHelperGuides();
   drawPhantomObject();
   drawObjects();
