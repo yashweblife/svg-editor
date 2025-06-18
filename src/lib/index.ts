@@ -1,5 +1,5 @@
 import { action_types, basic_object, tool_types } from "../types";
-import Canvas, { c, canvas, canvas_background } from "./Canvas";
+import Canvas, { c, canvas, canvas_background, grid_dots, helper_line_color } from "./Canvas";
 import EventMap from "./Events";
 import mouse from "./Mouse";
 const settings:{
@@ -12,5 +12,5 @@ const settings:{
     current_object: null
 }
 
-export { c, Canvas, canvas, canvas_background, EventMap, mouse, settings };
+export { c, Canvas, canvas, canvas_background, EventMap, grid_dots, helper_line_color, mouse, settings };
 
