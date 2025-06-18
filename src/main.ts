@@ -36,11 +36,9 @@ function handleCanvasMouseMove(e: MouseEvent) {
 function resizeWindow() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  console.log("resize")
 }
 function handleEscapeKey(e: KeyboardEvent) {
   e.preventDefault();
-  console.log(e.key)
   if (e.key === "Escape") {
     if (current_action === "draw") {
       current_tool = "none";
@@ -71,17 +69,16 @@ function handleHotKeyDraw(e: KeyboardEvent) {
 function handleSelectCircle() {
   current_tool = "circle";
   current_action = "draw";
-  console.log("select circle")
 }
 function handleCanvasClick(e: MouseEvent) {
-  if (current_action === "draw" && current_tool === "circle") {
+  if (current_action === "draw" && current_tool !== "none") {
     if (current_object == null) {
       current_object = {
         x: e.offsetX,
         y: e.offsetY,
         rx: 0,
         ry: 0,
-        type: "circle"
+        type: current_tool
       }
     } else {
       current_object.rx = e.offsetX;
@@ -109,12 +106,19 @@ function animation() {
       c.closePath();
     }
   }
-  if (current_action === "draw" && current_tool === "circle" && current_object != null) {
-    const dist = Math.sqrt((mouse.x - current_object.x) ** 2 + (mouse.y - current_object.y) ** 2);
-    c.beginPath();
-    c.arc(current_object.x, current_object.y, dist, 0, 2 * Math.PI);
-    c.stroke();
-    c.closePath();
+  if (current_action === "draw" && current_object != null) {
+    if( current_tool === "circle"){
+      const dist = Math.sqrt((mouse.x - current_object.x) ** 2 + (mouse.y - current_object.y) ** 2);
+      c.beginPath();
+      c.arc(current_object.x, current_object.y, dist, 0, 2 * Math.PI);
+      c.stroke();
+      c.closePath();
+    }else if( current_tool === "rectangle"){
+      c.beginPath();
+      c.rect(current_object.x, current_object.y, mouse.x - current_object.x, mouse.y - current_object.y);
+      c.stroke();
+      c.closePath();
+    }   
   }
   for (let i = 0; i < objects.length; i++) {
     c.beginPath();
@@ -123,15 +127,10 @@ function animation() {
       const dist = Math.sqrt((o.x - o.rx) ** 2 + (o.y - o.ry) ** 2);
       c.arc(o.x, o.y, dist, 0, 2 * Math.PI);
       c.stroke();
-      c.closePath();
-      c.beginPath();
-      c.fillStyle = "rgba(255,255,255,0.4)";
-      c.arc(o.x, o.y, 5, 0, 2 * Math.PI);
-      c.fill();
-      c.closePath();
-      c.beginPath();
-      c.arc(o.rx, o.ry, 5, 0, 2 * Math.PI);
-      c.stroke();
+    }
+    else if(objects[i].type === "rectangle"){
+      c.rect(o.x, o.y, o.rx - o.x, o.ry - o.y);
+      c.stroke();  
     }
     c.closePath();
   }
