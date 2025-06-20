@@ -1,4 +1,5 @@
 import { c, canvas, canvas_background, distance, EventMap, grid_dots, helper_line_color, mouse, settings } from "./lib";
+import { rectangleFromCenter } from "./lib/helpers";
 import "./styles/common.css";
 import { basic_object, tool_types } from "./types";
 
@@ -166,6 +167,8 @@ function drawGrid() {
   }
 }
 function drawMouseTool() {
+  if(current_action === "none") return
+  if(current_tool === "none") return
   const dist = distance(mouse, { x: window.innerWidth / 2, y: window.innerHeight / 2 });
   const pos = { ...mouse }
   if (dist < 20) {
@@ -173,7 +176,20 @@ function drawMouseTool() {
     mouse.y = window.innerHeight / 2
   }
   c.beginPath();
-  c.arc(pos.x, pos.y, 5, 0, 2 * Math.PI);
+  if(current_tool === "circle"){
+    c.arc(pos.x, pos.y, 5, 0, 2 * Math.PI);
+  }else if(current_tool === "rectangle"){
+    const val = rectangleFromCenter(pos.x, pos.y, 10, 10)
+    c.rect(val.x, val.y, val.w, val.h);
+  } else if(current_tool === "line"){
+    c.moveTo(mouse.x+10, mouse.y-10);
+    c.lineTo(mouse.x-10, mouse.y+10);
+  } else if(current_tool === "path"){
+    c.moveTo(mouse.x+10, mouse.y-10);
+    c.lineTo(mouse.x-10, mouse.y+10);
+    c.arc(mouse.x, mouse.y, 5, 0, 2 * Math.PI);
+  }
+
   c.strokeStyle = helper_line_color;
   c.stroke();
   c.closePath();
