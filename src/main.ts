@@ -217,12 +217,19 @@ function drawHelperGuides() {
       }
     }
     c.beginPath();
-    c.arc(closest_object.x, closest_object.y, 2, 0, 2 * Math.PI);
-    c.rect(closest_object.x, closest_object.y, mouse.x - closest_object.x, mouse.y - closest_object.y);
+    if(closest_object.type === "circle"){
+      if(closest_distance <= closest_object.r!){
+        c.arc(closest_object.x, closest_object.y, 10, 0, 2 * Math.PI);
+      }else {
+        if(current_object != null && current_object.type === "circle"){
+          c.arc(current_object.x, current_object.y, closest_object.r!, 0, 2 * Math.PI);
+          
+        }
+      }
+    }
     c.strokeStyle = helper_line_color;
     c.stroke();
     c.closePath();
-    c.strokeStyle = grid_dots;
   }
 }
 function drawPhantomObject() {
@@ -291,9 +298,8 @@ function drawObjects() {
         break;
     }
     if(checkMouseOnTop(o)){
-      c.strokeStyle = "red"
+      c.strokeStyle = "rgb(255, 100, 100)"
       selected_object = o
-      console.log(o)
     }else{
       selected_object = null
       c.strokeStyle = grid_dots
