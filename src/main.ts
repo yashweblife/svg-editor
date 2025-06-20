@@ -3,19 +3,26 @@ import "./styles/common.css";
 import { basic_object, tool_types } from "./types";
 
 const circleButton = document.querySelector("#circle") as HTMLButtonElement;
-const objects: basic_object[] = [];
 
-let { current_tool, current_action, current_object } = settings;
+let { current_tool, current_action, current_object, objects, selected_object } = settings;
 
 EventMap<MouseEvent>(circleButton, "click", [handleSelectCircle]);
 EventMap<MouseEvent>(canvas, "click", [handleCanvasClick]);
 EventMap<Event>(window, "resize", [resizeWindow]);
 EventMap<KeyboardEvent>(window, "keydown", [handleEscapeKey, handleHotKeyDraw]);
-EventMap<MouseEvent>(canvas, "mousemove", [handleCanvasMouseMove]);
+EventMap<MouseEvent>(canvas, "mousemove", [handleCanvasMouseMove, handleDragObject]);
+EventMap<MouseEvent>(canvas, "mousedown", [handleCanvasMouseDown]);
+EventMap<MouseEvent>(canvas, "mouseup", [handleCanvasMouseUp]);
 
 function handleCanvasMouseMove(e: MouseEvent) {
   mouse.x = e.offsetX;
   mouse.y = e.offsetY;
+}
+function handleCanvasMouseDown(e: MouseEvent) {
+  mouse.click = true;
+}
+function handleCanvasMouseUp(e: MouseEvent) {
+  mouse.click = false;
 }
 function resizeWindow() {
   canvas.width = window.innerWidth;
@@ -111,12 +118,21 @@ function handleCanvasClick(e: MouseEvent) {
       } else {
         current_object.rx = e.offsetX;
         current_object.ry = e.offsetY;
+        current_object.r = distance({ x: current_object.x, y: current_object.y }, { x: current_object.rx, y: current_object.ry });
         objects.push(current_object);
         current_object = null;
         current_action = "none";
         current_tool = "none";
       }
     }
+  }
+}
+function handleDragObject(e: MouseEvent) {
+  if(!mouse.click) return
+  console.log(selected_object)
+  if (selected_object != null) {
+    selected_object.x = e.offsetX;
+    selected_object.y = e.offsetY;
   }
 }
 
@@ -161,6 +177,16 @@ function drawMouseTool() {
   c.strokeStyle = helper_line_color;
   c.stroke();
   c.closePath();
+}
+function checkMouseOnTop(obj:basic_object){
+    if(obj.type === "circle"){
+      const dist = distance(mouse, { x: obj.x, y: obj.y });
+      let rad = obj.r??10;
+      if (dist < rad+10) {
+        return true
+      }
+      return false
+    }
 }
 function drawHelperGuides() {
   if (current_action === "draw" && objects.length > 0) {
@@ -224,10 +250,9 @@ function drawObjects() {
   for (let i = 0; i < objects.length; i++) {
     c.beginPath();
     const o = objects[i];
-    const dist = distance({ x: o.x, y: o.y }, { x: o.rx, y: o.ry });
     switch (o.type) {
       case "circle":
-        c.arc(o.x, o.y, dist, 0, 2 * Math.PI);
+        c.arc(o.x, o.y, o.r??10, 0, 2 * Math.PI);
         break;
       case "rectangle":
         c.rect(o.x, o.y, o.rx - o.x, o.ry - o.y);
@@ -248,6 +273,14 @@ function drawObjects() {
           prev = paths[i];
         }
         break;
+    }
+    if(checkMouseOnTop(o)){
+      c.strokeStyle = "red"
+      selected_object = o
+      console.log(o)
+    }else{
+      selected_object = null
+      c.strokeStyle = grid_dots
     }
     c.stroke();
     c.closePath();
