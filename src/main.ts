@@ -1,4 +1,4 @@
-import { c, canvas, canvas_background, distance, EventMap, grid_dots, helper_line_color, mouse, settings } from "./lib";
+import { c, Canvas, canvas, distance, EventMap, grid_dots, helper_line_color, mouse, settings } from "./lib";
 import { rectangleFromCenter } from "./lib/helpers";
 import "./styles/common.css";
 import { basic_object, tool_types } from "./types";
@@ -138,31 +138,14 @@ function handleDragObject(e: MouseEvent) {
 }
 
 function clearCanvas() {
-  c.fillStyle = canvas_background;
-  c.fillRect(0, 0, canvas.width, canvas.height);
+  Canvas.fillCanvas();
 }
 function drawGrid() {
   c.strokeStyle = grid_dots;
-  const center = {
-    x: window.innerWidth / 2,
-    y: window.innerHeight / 2
-  }
-  c.beginPath();
-  c.moveTo(center.x, 0);
-  c.lineTo(center.x, window.innerHeight);
-  c.stroke();
-  c.closePath();
-  c.beginPath();
-  c.moveTo(0, center.y);
-  c.lineTo(window.innerWidth, center.y);
-  c.stroke();
-  c.closePath();
+  Canvas.drawOrigin(c);
   for (let i = 10; i < window.innerWidth + 100; i += 50) {
     for (let j = 10; j < window.innerHeight + 100; j += 50) {
-      c.beginPath();
-      c.arc(i, j, 1, 0, 2 * Math.PI);
-      c.stroke();
-      c.closePath();
+      Canvas.arc(c, i, j, 1, 0, 2 * Math.PI);
     }
   }
 }
@@ -223,9 +206,11 @@ function drawHelperGuides() {
       }else {
         if(current_object != null && current_object.type === "circle"){
           c.arc(current_object.x, current_object.y, closest_object.r!, 0, 2 * Math.PI);
-          
         }
       }
+    }
+    else if(closest_object.type === "line"){
+      
     }
     c.strokeStyle = helper_line_color;
     c.stroke();
@@ -244,8 +229,7 @@ function drawPhantomObject() {
         c.rect(current_object.x, current_object.y, mouse.x - current_object.x, mouse.y - current_object.y);
         break;
       case "line":
-        c.moveTo(current_object.x, current_object.y);
-        c.lineTo(mouse.x, mouse.y);
+        Canvas.manyLine(c, current_object.x, current_object.y, mouse.x, mouse.y);
         break;
       case "path":
         if (current_object.paths) {
@@ -281,20 +265,14 @@ function drawObjects() {
         c.rect(o.x, o.y, o.rx - o.x, o.ry - o.y);
         break;
       case "line":
-        c.moveTo(o.x, o.y);
-        c.lineTo(o.rx, o.ry);
+        Canvas.manyLine(c, o.x, o.y, o.rx, o.ry);
         break;
       case "path":
-        const paths = o.paths;
-        if (!paths || paths.length === 0) {
+        const points = o.paths;
+        if (!points || points.length === 0) {
           continue;
         }
-        let prev = paths[0];
-        for (let i = 1; i < paths.length; i++) {
-          c.moveTo(prev.x, prev.y);
-          c.lineTo(paths[i].x, paths[i].y);
-          prev = paths[i];
-        }
+        Canvas.path(c, points);
         break;
     }
     if(checkMouseOnTop(o)){
