@@ -184,8 +184,8 @@ function checkMouseOnTop(obj:basic_object){
       if (dist < rad+10) {
         return true
       }
-      return false
     }
+    return false
 }
 function drawHelperGuides() {
   if (current_action === "draw" && objects.length > 0) {
@@ -228,7 +228,7 @@ function drawPhantomObject() {
       case "rectangle":
         c.rect(current_object.x, current_object.y, mouse.x - current_object.x, mouse.y - current_object.y);
         break;
-      case "line":
+      case "line":  
         Canvas.manyLine(c, current_object.x, current_object.y, mouse.x, mouse.y);
         break;
       case "path":
