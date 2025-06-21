@@ -11,13 +11,16 @@ const settings:{
     current_action: action_types,
     current_object: null | basic_object,
     objects: basic_object[],
-    selected_object: null | basic_object
+    selected_object: null | basic_object,
+    closest_object: null | basic_object
+    
 } = {
     current_tool: "circle",
     current_action: "none",
     current_object: null,
     objects: [],
-    selected_object: null
+    selected_object: null,
+    closest_object: null
 }
 
 export { c, Canvas, canvas, canvas_background, distance, EventMap, grid_dots, helper_line_color, mouse, settings };
