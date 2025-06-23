@@ -1,5 +1,6 @@
-import { c, Canvas, canvas, distance, EventMap, grid_dots, helper_line_color, mouse, settings } from "./lib";
+import { Arc, c, Canvas, canvas, distance, EventMap, grid_dots, helper_line_color, mouse, settings } from "./lib";
 import { rectangleFromCenter } from "./lib/helpers";
+import Vec from "./lib/Vector";
 import "./styles/common.css";
 import { basic_object, tool_types } from "./types";
 
@@ -218,10 +219,27 @@ function drawHelperGuides() {
     }
     c.beginPath();
     if(closest_object.type === "circle"){
-      if(closest_distance <= closest_object.r!){
-        c.arc(closest_object.x, closest_object.y, 10, 0, 2 * Math.PI);
+      if(closest_distance <= closest_object.r!+20 && closest_distance >= closest_object.r!-20){
+        const angle = Vec.angle(closest_object, mouse);
+        const point = Arc.getPointAtAngle(
+          closest_object.x,
+          closest_object.y,
+          closest_object.r!,
+          angle
+        )
+        sticky_point = point
+        Canvas.arc(c, point.x, point.y, 5, 0, 2 * Math.PI);
       }else {
-        if(current_object != null && current_object.type === "circle"){
+        sticky_point = null
+        if(current_object != null && current_object.type === "circle" && Math.abs(distance(mouse, current_object)-closest_object.r!)<10){
+          const angle = Vec.angle(closest_object, mouse);
+        const point = Arc.getPointAtAngle(
+          current_object.x,
+          current_object.y,
+          closest_object.r!,
+          angle
+        )
+          sticky_point = point
           c.arc(current_object.x, current_object.y, closest_object.r!, 0, 2 * Math.PI);
         }
       }
