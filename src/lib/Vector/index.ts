@@ -87,3 +87,6 @@ export class Line{
         return Vec.distance(point, p);
     }
 } 
+export class Rect {
+    
+}
