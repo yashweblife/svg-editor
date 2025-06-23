@@ -106,3 +106,12 @@ export class Rect {
         ]
     }
 }
+
+export class Arc {
+    static containsPoint(point:vec2d, x:number, y:number, r:number){
+        return (point.x - x) * (point.x - x) + (point.y - y) * (point.y - y) <= r * r
+    }
+    static getAngleAtDistance(x: number, y: number, r: number, distance: number) {
+        return Math.atan2(distance, r) + Math.atan2(y, x);
+    }
+}
