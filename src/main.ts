@@ -5,7 +5,7 @@ import { basic_object, tool_types } from "./types";
 
 const circleButton = document.querySelector("#circle") as HTMLButtonElement;
 
-let { current_tool, current_action, current_object, objects, selected_object } = settings;
+let { current_tool, current_action, current_object, objects, selected_object, sticky_point, canvas_center } = settings;
 
 EventMap<MouseEvent>(circleButton, "click", [handleSelectCircle]);
 EventMap<MouseEvent>(canvas, "click", [handleCanvasClick]);
@@ -18,6 +18,23 @@ EventMap<MouseEvent>(canvas, "mouseup", [handleCanvasMouseUp]);
 function handleCanvasMouseMove(e: MouseEvent) {
   mouse.x = e.offsetX;
   mouse.y = e.offsetY;
+  if(distance(mouse, canvas_center)<10){
+    sticky_point = canvas_center
+  }else{
+    sticky_point = null
+  }
+  if(objects.length>0){
+    let closest_object = objects[0];
+    let closest_distance = distance(mouse, closest_object);
+    for (let i = 0; i < objects.length; i++) {
+      let b = { x: objects[i].x, y: objects[i].y, rx: objects[i].rx, ry: objects[i].ry };
+      let distance1 = distance(mouse, b);
+      if (distance1 < closest_distance) {
+        closest_distance = distance1;
+        closest_object = objects[i];
+      }
+    }
+  }
 }
 function handleCanvasMouseDown(e: MouseEvent) {
   mouse.click = true;
@@ -110,8 +127,8 @@ function handleCanvasClick(e: MouseEvent) {
     } else {
       if (current_object == null) {
         current_object = {
-          x: e.offsetX,
-          y: e.offsetY,
+          x: sticky_point ? sticky_point.x : e.offsetX,
+          y: sticky_point ? sticky_point.y : e.offsetY,
           rx: 0,
           ry: 0,
           type: current_tool
@@ -132,8 +149,8 @@ function handleDragObject(e: MouseEvent) {
   if(!mouse.click) return
   console.log(selected_object)
   if (selected_object != null) {
-    selected_object.x = e.offsetX;
-    selected_object.y = e.offsetY;
+    selected_object.x = sticky_point ? sticky_point.x : e.offsetX;
+    selected_object.y = sticky_point ? sticky_point.y : e.offsetY;
   }
 }
 
@@ -254,6 +271,12 @@ function drawPhantomObject() {
   }
 }
 function drawObjects() {
+  if(sticky_point != null){
+    c.beginPath();
+    c.strokeStyle = "rgb(255, 100, 100)"
+    Canvas.arc(c, sticky_point.x, sticky_point.y, 5, 0, 2 * Math.PI);
+    c.closePath();
+  }
   for (let i = 0; i < objects.length; i++) {
     c.beginPath();
     const o = objects[i];
