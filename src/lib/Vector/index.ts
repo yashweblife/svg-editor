@@ -91,6 +91,14 @@ export class Rect {
     static containsPoint(point: vec2d, rect: vec2d, size: vec2d) {
         return point.x > rect.x && point.x < rect.x + size.x && point.y > rect.y && point.y < rect.y + size.y;
     }
+    static toLines(rect: vec2d, size: vec2d) {
+        return [
+            {a: {x: rect.x, y: rect.y}, b: {x: rect.x + size.x, y: rect.y}},
+            {a: {x: rect.x + size.x, y: rect.y}, b: {x: rect.x + size.x, y: rect.y + size.y}},
+            {a: {x: rect.x + size.x, y: rect.y + size.y}, b: {x: rect.x, y: rect.y + size.y}},
+            {a: {x: rect.x, y: rect.y + size.y}, b: {x: rect.x, y: rect.y}}
+        ]
+    }
     static getCenter(start: vec2d, size: vec2d) {
         return {
             x: start.x + size.x / 2,
