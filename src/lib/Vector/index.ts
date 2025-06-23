@@ -122,4 +122,10 @@ export class Arc {
     static getAngleAtDistance(x: number, y: number, r: number, distance: number) {
         return Math.atan2(distance, r) + Math.atan2(y, x);
     }
+    static getPointAtAngle(x: number, y: number, r: number, angle: number) {
+        return {
+            x: r * Math.cos(angle) + x,
+            y: r * Math.sin(angle) + y
+        }
+    }
 }
