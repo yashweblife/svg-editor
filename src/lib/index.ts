@@ -14,6 +14,7 @@ const settings:{
     selected_object: null | basic_object,
     closest_object: null | basic_object,
     sticky_point: null | vec2d,
+    canvas_center: vec2d
     
 } = {
     current_tool: "circle",
@@ -22,7 +23,8 @@ const settings:{
     objects: [],
     selected_object: null,
     closest_object: null,
-    sticky_point: null
+    sticky_point: null,
+    canvas_center: { x: canvas.width / 2, y: canvas.height / 2 }
 }
 
 export { c, Canvas, canvas, canvas_background, distance, EventMap, grid_dots, helper_line_color, mouse, settings };
