@@ -60,3 +60,30 @@ export default class Vec{
         }
     }
 }
+
+export class Line{
+    static segmentIntersects(a:vec2d,b:vec2d,c:vec2d,d:vec2d){
+        const denominator = (b.y - a.y) * (d.x - c.x) - (b.x - a.x) * (d.y - c.y);
+        const numerator1 = (a.y - c.y) * (d.x - c.x) - (a.x - c.x) * (d.y - c.y);
+        const numerator2 = (a.y - c.y) * (b.x - a.x) - (a.x - c.x) * (b.y - a.y);
+        return numerator1 / denominator > 0 && numerator1 / denominator < 1 && numerator2 / denominator > 0 && numerator2 / denominator < 1
+    }
+    static isPointOnLine(a:vec2d,b:vec2d,c:vec2d){
+        return a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y) === 0;
+    }
+    static shortestDistance(point:vec2d, a:vec2d, b:vec2d){
+        const ap = Vec.sub(a, point);
+        const ab = Vec.sub(b, a);
+        const c1 = Vec.dot(ap, ab);
+        if (c1 <= 0) {
+            return Vec.distance(point, a);
+        }
+        const c2 = Vec.dot(ab, ab);
+        if (c2 <= c1) {
+            return Vec.distance(point, b);
+        }
+        const barycentric = c1 / c2;
+        const p = Vec.add(a, Vec.scale(ab, barycentric));
+        return Vec.distance(point, p);
+    }
+} 
