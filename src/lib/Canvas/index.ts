@@ -40,7 +40,7 @@ export default class Canvas {
     static clear(c: CanvasRenderingContext2D, x: number = 0, y: number = 0, w: number = window.innerWidth, h: number = window.innerHeight) {
         c.clearRect(x, y, w, h);
     }
-    static fillCanvas(w: number = window.innerWidth, h: number = window.innerHeight) {
+    static fillCanvas(c: CanvasRenderingContext2D, w: number = window.innerWidth, h: number = window.innerHeight) {
         c.fillStyle = canvas_background;
         c.fillRect(0, 0, w, h);
     }
@@ -60,16 +60,20 @@ export default class Canvas {
         c.stroke();
         c.closePath();
     }
+    static getCanvas(val:string, parent="#app"){
+        const canvas = document.getElementById(val) as HTMLCanvasElement;
+        const c = canvas.getContext("2d") as CanvasRenderingContext2D;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        (document.querySelector(parent) as HTMLElement).appendChild(canvas);
+        return {c, canvas}
+    }
 }
 
-const canvas = document.createElement("canvas") as HTMLCanvasElement;
-const c = canvas.getContext("2d") as CanvasRenderingContext2D;
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
+const { c, canvas } = Canvas.getCanvas("canvas");
 const canvas_background = "rgb(18,18,18)";
 const grid_dots = "rgba(255,255,255,0.1)";
 const helper_line_color = "rgba(166, 105, 105, 0.68)";
 
-(document.querySelector("#app") as HTMLDivElement).appendChild(canvas);
+
 export { c, canvas, canvas_background, grid_dots, helper_line_color };
