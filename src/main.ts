@@ -2,7 +2,7 @@ import { Arc, c, Canvas, canvas, distance, EventMap, grid_dots, helper_line_colo
 import { rectangleFromCenter } from "./lib/helpers";
 import Vec from "./lib/Vector";
 import "./styles/common.css";
-import { basic_object, tool_types } from "./types";
+import { basic_object, tool_types, vec2d } from "./types";
 
 const circleButton = document.querySelector("#circle") as HTMLButtonElement;
 
@@ -37,17 +37,17 @@ function handleCanvasMouseMove(e: MouseEvent) {
     }
   }
 }
-function handleCanvasMouseDown(e: MouseEvent) {
+function handleCanvasMouseDown(e: MouseEvent, mouse:vec2d&{click: boolean}) {
   mouse.click = true;
 }
-function handleCanvasMouseUp(e: MouseEvent) {
+function handleCanvasMouseUp(e: MouseEvent, mouse:vec2d&{click: boolean}) {
   mouse.click = false;
 }
-function resizeWindow() {
+function resizeWindow(canvas: HTMLCanvasElement) {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 }
-function handleEscapeKey(e: KeyboardEvent) {
+function handleEscapeKey(e: KeyboardEvent, current_action: string, current_object: basic_object | null) {
   // e.preventDefault();
   if (e.key === "Escape") {
     if (current_action === "draw") {
@@ -60,7 +60,7 @@ function handleEscapeKey(e: KeyboardEvent) {
     current_action = "none";
   }
 }
-function handleHotKeyDraw(e: KeyboardEvent) {
+function handleHotKeyDraw(e: KeyboardEvent, current_action: string, current_tool: string, objects: basic_object[]) {
   // e.preventDefault();
   let isValidKey: tool_types = "none"
   switch ((e.key).toLowerCase()) {
@@ -92,7 +92,7 @@ function handleSelectCircle() {
   current_tool = "circle";
   current_action = "draw";
 }
-function handleCanvasClick(e: MouseEvent) {
+function handleCanvasClick(e: MouseEvent, current_action: string, current_tool: tool_types, current_object: basic_object | null, objects: basic_object[]) {
   if (current_action === "draw" && current_tool !== "none") {
     if (current_tool === "path") {
       if (current_object == null) {
@@ -146,7 +146,7 @@ function handleCanvasClick(e: MouseEvent) {
     }
   }
 }
-function handleDragObject(e: MouseEvent) {
+function handleDragObject(e: MouseEvent, mouse:vec2d&{click: boolean}, selected_object: basic_object | null, sticky_point: vec2d | null) {
   if (!mouse.click) return
   console.log(selected_object)
   if (selected_object != null) {
@@ -158,7 +158,7 @@ function handleDragObject(e: MouseEvent) {
 function clearCanvas() {
   Canvas.fillCanvas();
 }
-function drawGrid() {
+function drawGrid(c: CanvasRenderingContext2D) {
   c.strokeStyle = grid_dots;
   Canvas.drawOrigin(c);
   for (let i = 10; i < window.innerWidth + 100; i += 50) {
@@ -167,7 +167,7 @@ function drawGrid() {
     }
   }
 }
-function drawMouseTool() {
+function drawMouseTool(c: CanvasRenderingContext2D, mouse: vec2d, current_action: string, current_tool: tool_types) {
   if (current_action === "none") return
   if (current_tool === "none") return
   const dist = distance(mouse, { x: window.innerWidth / 2, y: window.innerHeight / 2 });
@@ -195,7 +195,7 @@ function drawMouseTool() {
   c.stroke();
   c.closePath();
 }
-function checkMouseOnTop(obj: basic_object) {
+function checkMouseOnTop(obj: basic_object, mouse: vec2d) {
   if (obj.type === "circle") {
     const dist = distance(mouse, { x: obj.x, y: obj.y });
     let rad = obj.r ?? 10;
