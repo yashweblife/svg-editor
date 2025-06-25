@@ -8,7 +8,7 @@ const circleButton = document.querySelector("#circle") as HTMLButtonElement;
 
 let { current_tool, current_action, current_object, objects, selected_object, sticky_point, canvas_center } = settings;
 
-EventMap<MouseEvent>(circleButton, "click", [()=>{handleSelectCircle()}]);
+EventMap<MouseEvent>(circleButton, "click", [()=>{handleSelectCircle(current_tool, current_action)}]);
 EventMap<MouseEvent>(canvas, "click", [(e: MouseEvent)=>{handleCanvasClick(e, current_action, current_tool, current_object, objects)}]);
 EventMap<Event>(window, "resize", [()=>{resizeWindow(canvas)}]);
 EventMap<KeyboardEvent>(window, "keydown", [(e: KeyboardEvent)=>{handleEscapeKey(e, current_action, current_object)}, (e: KeyboardEvent)=>{handleHotKeyDraw(e, current_action, current_tool, objects)}]);
@@ -88,7 +88,7 @@ function handleHotKeyDraw(e: KeyboardEvent, current_action: string, current_tool
     objects.pop();
   }
 }
-function handleSelectCircle() {
+function handleSelectCircle(current_tool: string, current_action: string) {
   current_tool = "circle";
   current_action = "draw";
 }
@@ -155,8 +155,8 @@ function handleDragObject(e: MouseEvent, mouse:vec2d&{click: boolean}, selected_
   }
 }
 
-function clearCanvas() {
-  Canvas.fillCanvas();
+function clearCanvas(c: CanvasRenderingContext2D) {
+  Canvas.fillCanvas(c);
 }
 function drawGrid(c: CanvasRenderingContext2D) {
   c.strokeStyle = grid_dots;
@@ -330,7 +330,7 @@ function drawObjects() {
 
 function animation() {
   requestAnimationFrame(animation);
-  clearCanvas();
+  clearCanvas(c);
   drawGrid(c);
   drawMouseTool(c,mouse, current_action, current_tool);
   drawHelperGuides();
