@@ -331,8 +331,8 @@ function drawObjects() {
 function animation() {
   requestAnimationFrame(animation);
   clearCanvas();
-  drawGrid();
-  drawMouseTool();
+  drawGrid(c);
+  drawMouseTool(c,mouse, current_action, current_tool);
   drawHelperGuides();
   drawPhantomObject();
   drawObjects();
