@@ -9,12 +9,12 @@ const circleButton = document.querySelector("#circle") as HTMLButtonElement;
 let { current_tool, current_action, current_object, objects, selected_object, sticky_point, canvas_center } = settings;
 
 EventMap<MouseEvent>(circleButton, "click", [()=>{handleSelectCircle()}]);
-EventMap<MouseEvent>(canvas, "click", [()=>{handleCanvasClick()}]);
-EventMap<Event>(window, "resize", [()=>{resizeWindow()}]);
-EventMap<KeyboardEvent>(window, "keydown", [()=>{handleEscapeKey()}, ()=>{handleHotKeyDraw()}]);
-EventMap<MouseEvent>(canvas, "mousemove", [()=>{handleCanvasMouseMove()}, ()=>{handleDragObject()}]);
-EventMap<MouseEvent>(canvas, "mousedown", [()=>{handleCanvasMouseDown()}]);
-EventMap<MouseEvent>(canvas, "mouseup", [()=>{handleCanvasMouseUp()}]);
+EventMap<MouseEvent>(canvas, "click", [(e: MouseEvent)=>{handleCanvasClick(e, current_action, current_tool, current_object, objects)}]);
+EventMap<Event>(window, "resize", [()=>{resizeWindow(canvas)}]);
+EventMap<KeyboardEvent>(window, "keydown", [(e: KeyboardEvent)=>{handleEscapeKey(e, current_action, current_object)}, (e: KeyboardEvent)=>{handleHotKeyDraw(e, current_action, current_tool, objects)}]);
+EventMap<MouseEvent>(canvas, "mousemove", [(e: MouseEvent)=>{handleCanvasMouseMove(e)}, (e: MouseEvent)=>{handleDragObject(e, mouse, selected_object, sticky_point)}]);
+EventMap<MouseEvent>(canvas, "mousedown", [(e: MouseEvent)=>{handleCanvasMouseDown(e, mouse)}]);
+EventMap<MouseEvent>(canvas, "mouseup", [(e: MouseEvent)=>{handleCanvasMouseUp(e, mouse)}]);
 
 function handleCanvasMouseMove(e: MouseEvent) {
   mouse.x = e.offsetX;
