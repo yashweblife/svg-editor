@@ -77,7 +77,7 @@ export function handleEscapeKey(e: KeyboardEvent, settings: Settings) {
     settings.current_action = "none";
   }
 }
-export function handleHotKeyDraw(e: KeyboardEvent, settings:Settings) {
+export function handleHotKeyDraw(e: KeyboardEvent, settings: Settings) {
   // e.preventDefault();
   let isValidKey: tool_types = "none"
   switch ((e.key).toLowerCase()) {
@@ -105,7 +105,7 @@ export function handleHotKeyDraw(e: KeyboardEvent, settings:Settings) {
     settings.objects.pop();
   }
 }
-export function handleCanvasMouseMove(e: MouseEvent, mouse: vec2d, settings:Settings) {
+export function handleCanvasMouseMove(e: MouseEvent, mouse: vec2d, settings: Settings) {
   mouse.x = e.offsetX;
   mouse.y = e.offsetY;
   if (distance(mouse, settings.canvas_center) < 10) {
