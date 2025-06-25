@@ -4,10 +4,10 @@ import EventMap from "./Events";
 import mouse from "./Mouse";
 import { Arc, Line, Rect } from "./Vector";
 
-function distance(a:vec2d, b:vec2d){
+function distance(a: vec2d, b: vec2d) {
     return Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
 }
-const settings:{
+const settings: {
     current_tool: tool_types,
     current_action: action_types,
     current_object: null | basic_object,
@@ -16,7 +16,7 @@ const settings:{
     closest_object: null | basic_object,
     sticky_point: null | vec2d,
     canvas_center: vec2d
-    
+
 } = {
     current_tool: "circle",
     current_action: "none",
