@@ -1,5 +1,5 @@
 import { action_types, basic_object, tool_types, vec2d } from "../types";
-import Canvas, { c, canvas, canvas_background, grid_dots, helper_line_color } from "./Canvas";
+import Canvas, { canvas_background, grid_dots, helper_line_color } from "./Canvas";
 import EventMap from "./Events";
 import mouse from "./Mouse";
 import { Arc, Line, Rect } from "./Vector";
@@ -25,8 +25,8 @@ const settings: {
     selected_object: null,
     closest_object: null,
     sticky_point: null,
-    canvas_center: { x: canvas.width / 2, y: canvas.height / 2 }
+    canvas_center: { x: window.innerWidth / 2, y: window.innerHeight / 2 }
 }
 
-export { Arc, c, Canvas, canvas, canvas_background, distance, EventMap, grid_dots, helper_line_color, Line, mouse, Rect, settings };
+export { Arc, Canvas, canvas_background, distance, EventMap, grid_dots, helper_line_color, Line, mouse, Rect, settings };
 
