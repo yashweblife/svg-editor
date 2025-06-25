@@ -93,10 +93,10 @@ export class Rect {
     }
     static toLines(rect: vec2d, size: vec2d) {
         return [
-            {a: {x: rect.x, y: rect.y}, b: {x: rect.x + size.x, y: rect.y}},
-            {a: {x: rect.x + size.x, y: rect.y}, b: {x: rect.x + size.x, y: rect.y + size.y}},
-            {a: {x: rect.x + size.x, y: rect.y + size.y}, b: {x: rect.x, y: rect.y + size.y}},
-            {a: {x: rect.x, y: rect.y + size.y}, b: {x: rect.x, y: rect.y}}
+            { a: { x: rect.x, y: rect.y }, b: { x: rect.x + size.x, y: rect.y } },
+            { a: { x: rect.x + size.x, y: rect.y }, b: { x: rect.x + size.x, y: rect.y + size.y } },
+            { a: { x: rect.x + size.x, y: rect.y + size.y }, b: { x: rect.x, y: rect.y + size.y } },
+            { a: { x: rect.x, y: rect.y + size.y }, b: { x: rect.x, y: rect.y } }
         ]
     }
     static getCenter(start: vec2d, size: vec2d) {
@@ -107,16 +107,16 @@ export class Rect {
     }
     static getMatrix() {
         return [
-            [-1,-1],
-            [1,-1],
-            [1,1],
-            [-1,1]
+            [-1, -1],
+            [1, -1],
+            [1, 1],
+            [-1, 1]
         ]
     }
 }
 
 export class Arc {
-    static containsPoint(point:vec2d, x:number, y:number, r:number){
+    static containsPoint(point: vec2d, x: number, y: number, r: number) {
         return (point.x - x) * (point.x - x) + (point.y - y) * (point.y - y) <= r * r
     }
     static getAngleAtDistance(x: number, y: number, r: number, distance: number) {
