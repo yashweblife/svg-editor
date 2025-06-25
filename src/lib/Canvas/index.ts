@@ -1,5 +1,9 @@
 import { vec2d } from "../../types";
-
+import {
+    canvas_background,
+    grid_dots,
+    helper_line_color
+} from "./colors";
 export default class Canvas {
     static arc(c: CanvasRenderingContext2D, x: number, y: number, r: number, startAngle: number, endAngle: number) {
         c.beginPath();
@@ -60,20 +64,19 @@ export default class Canvas {
         c.stroke();
         c.closePath();
     }
-    static getCanvas(val:string, parent="#app"){
+    static getCanvas(val = "#canvas", parent = "#app") {
         const canvas = document.getElementById(val) as HTMLCanvasElement;
+        console.log(canvas)
         const c = canvas.getContext("2d") as CanvasRenderingContext2D;
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         (document.querySelector(parent) as HTMLElement).appendChild(canvas);
-        return {c, canvas}
+        return { c, canvas }
     }
 }
 
-const { c, canvas } = Canvas.getCanvas("canvas");
-const canvas_background = "rgb(18,18,18)";
-const grid_dots = "rgba(255,255,255,0.1)";
-const helper_line_color = "rgba(166, 105, 105, 0.68)";
-
-
-export { c, canvas, canvas_background, grid_dots, helper_line_color };
+export {
+    canvas_background,
+    grid_dots,
+    helper_line_color
+};
