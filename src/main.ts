@@ -19,12 +19,12 @@ EventMap<MouseEvent>(canvas, "mouseup", [handleCanvasMouseUp]);
 function handleCanvasMouseMove(e: MouseEvent) {
   mouse.x = e.offsetX;
   mouse.y = e.offsetY;
-  if(distance(mouse, canvas_center)<10){
+  if (distance(mouse, canvas_center) < 10) {
     sticky_point = canvas_center
-  }else{
+  } else {
     sticky_point = null
   }
-  if(objects.length>0){
+  if (objects.length > 0) {
     let closest_object = objects[0];
     let closest_distance = distance(mouse, closest_object);
     for (let i = 0; i < objects.length; i++) {
@@ -147,7 +147,7 @@ function handleCanvasClick(e: MouseEvent) {
   }
 }
 function handleDragObject(e: MouseEvent) {
-  if(!mouse.click) return
+  if (!mouse.click) return
   console.log(selected_object)
   if (selected_object != null) {
     selected_object.x = sticky_point ? sticky_point.x : e.offsetX;
@@ -168,8 +168,8 @@ function drawGrid() {
   }
 }
 function drawMouseTool() {
-  if(current_action === "none") return
-  if(current_tool === "none") return
+  if (current_action === "none") return
+  if (current_tool === "none") return
   const dist = distance(mouse, { x: window.innerWidth / 2, y: window.innerHeight / 2 });
   const pos = { ...mouse }
   if (dist < 20) {
@@ -177,17 +177,17 @@ function drawMouseTool() {
     mouse.y = window.innerHeight / 2
   }
   c.beginPath();
-  if(current_tool === "circle"){
+  if (current_tool === "circle") {
     c.arc(pos.x, pos.y, 5, 0, 2 * Math.PI);
-  }else if(current_tool === "rectangle"){
+  } else if (current_tool === "rectangle") {
     const val = rectangleFromCenter(pos.x, pos.y, 10, 10)
     c.rect(val.x, val.y, val.w, val.h);
-  } else if(current_tool === "line"){
-    c.moveTo(mouse.x+10, mouse.y-10);
-    c.lineTo(mouse.x-10, mouse.y+10);
-  } else if(current_tool === "path"){
-    c.moveTo(mouse.x+10, mouse.y-10);
-    c.lineTo(mouse.x-10, mouse.y+10);
+  } else if (current_tool === "line") {
+    c.moveTo(mouse.x + 10, mouse.y - 10);
+    c.lineTo(mouse.x - 10, mouse.y + 10);
+  } else if (current_tool === "path") {
+    c.moveTo(mouse.x + 10, mouse.y - 10);
+    c.lineTo(mouse.x - 10, mouse.y + 10);
     c.arc(mouse.x, mouse.y, 5, 0, 2 * Math.PI);
   }
 
@@ -195,15 +195,15 @@ function drawMouseTool() {
   c.stroke();
   c.closePath();
 }
-function checkMouseOnTop(obj:basic_object){
-    if(obj.type === "circle"){
-      const dist = distance(mouse, { x: obj.x, y: obj.y });
-      let rad = obj.r??10;
-      if (dist < rad+10) {
-        return true
-      }
+function checkMouseOnTop(obj: basic_object) {
+  if (obj.type === "circle") {
+    const dist = distance(mouse, { x: obj.x, y: obj.y });
+    let rad = obj.r ?? 10;
+    if (dist < rad + 10) {
+      return true
     }
-    return false
+  }
+  return false
 }
 function drawHelperGuides() {
   if (current_action === "draw" && objects.length > 0) {
@@ -218,8 +218,8 @@ function drawHelperGuides() {
       }
     }
     c.beginPath();
-    if(closest_object.type === "circle"){
-      if(closest_distance <= closest_object.r!+20 && closest_distance >= closest_object.r!-20){
+    if (closest_object.type === "circle") {
+      if (closest_distance <= closest_object.r! + 20 && closest_distance >= closest_object.r! - 20) {
         const angle = Vec.angle(closest_object, mouse);
         const point = Arc.getPointAtAngle(
           closest_object.x,
@@ -229,23 +229,23 @@ function drawHelperGuides() {
         )
         sticky_point = point
         Canvas.arc(c, point.x, point.y, 5, 0, 2 * Math.PI);
-      }else {
+      } else {
         sticky_point = null
-        if(current_object != null && current_object.type === "circle" && Math.abs(distance(mouse, current_object)-closest_object.r!)<10){
+        if (current_object != null && current_object.type === "circle" && Math.abs(distance(mouse, current_object) - closest_object.r!) < 10) {
           const angle = Vec.angle(closest_object, mouse);
-        const point = Arc.getPointAtAngle(
-          current_object.x,
-          current_object.y,
-          closest_object.r!,
-          angle
-        )
+          const point = Arc.getPointAtAngle(
+            current_object.x,
+            current_object.y,
+            closest_object.r!,
+            angle
+          )
           sticky_point = point
           c.arc(current_object.x, current_object.y, closest_object.r!, 0, 2 * Math.PI);
         }
       }
     }
-    else if(closest_object.type === "line"){
-      
+    else if (closest_object.type === "line") {
+
     }
     c.strokeStyle = helper_line_color;
     c.stroke();
@@ -263,7 +263,7 @@ function drawPhantomObject() {
       case "rectangle":
         c.rect(current_object.x, current_object.y, mouse.x - current_object.x, mouse.y - current_object.y);
         break;
-      case "line":  
+      case "line":
         Canvas.manyLine(c, current_object.x, current_object.y, mouse.x, mouse.y);
         break;
       case "path":
@@ -289,7 +289,7 @@ function drawPhantomObject() {
   }
 }
 function drawObjects() {
-  if(sticky_point != null){
+  if (sticky_point != null) {
     c.beginPath();
     c.strokeStyle = "rgb(255, 100, 100)"
     Canvas.arc(c, sticky_point.x, sticky_point.y, 5, 0, 2 * Math.PI);
@@ -300,7 +300,7 @@ function drawObjects() {
     const o = objects[i];
     switch (o.type) {
       case "circle":
-        c.arc(o.x, o.y, o.r??10, 0, 2 * Math.PI);
+        c.arc(o.x, o.y, o.r ?? 10, 0, 2 * Math.PI);
         break;
       case "rectangle":
         c.rect(o.x, o.y, o.rx - o.x, o.ry - o.y);
@@ -316,10 +316,10 @@ function drawObjects() {
         Canvas.path(c, points);
         break;
     }
-    if(checkMouseOnTop(o)){
+    if (checkMouseOnTop(o)) {
       c.strokeStyle = "rgb(255, 100, 100)"
       selected_object = o
-    }else{
+    } else {
       selected_object = null
       c.strokeStyle = grid_dots
     }
