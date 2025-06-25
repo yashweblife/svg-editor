@@ -4,6 +4,14 @@ import {
     grid_dots,
     helper_line_color
 } from "./colors";
+import {
+    clearCanvas,
+    drawGrid,
+    drawHelperGuides,
+    drawMouseTool,
+    drawObjects,
+    drawPhantomObject
+} from "./handlers";
 export default class Canvas {
     static arc(c: CanvasRenderingContext2D, x: number, y: number, r: number, startAngle: number, endAngle: number) {
         c.beginPath();
@@ -64,8 +72,8 @@ export default class Canvas {
         c.stroke();
         c.closePath();
     }
-    static getCanvas(val = "#canvas", parent = "#app") {
-        const canvas = document.getElementById(val) as HTMLCanvasElement;
+    static makeCanvas(parent = "#app") {
+        const canvas = document.createElement("canvas") as HTMLCanvasElement;
         console.log(canvas)
         const c = canvas.getContext("2d") as CanvasRenderingContext2D;
         canvas.width = window.innerWidth;
@@ -74,9 +82,15 @@ export default class Canvas {
         return { c, canvas }
     }
 }
-
 export {
     canvas_background,
+    clearCanvas,
+    drawGrid,
+    drawHelperGuides,
+    drawMouseTool,
+    drawObjects,
+    drawPhantomObject,
     grid_dots,
     helper_line_color
 };
+
