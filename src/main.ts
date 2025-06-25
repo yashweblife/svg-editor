@@ -316,7 +316,7 @@ function drawObjects() {
         Canvas.path(c, points);
         break;
     }
-    if (checkMouseOnTop(o)) {
+    if (checkMouseOnTop(o, mouse)) {
       c.strokeStyle = "rgb(255, 100, 100)"
       selected_object = o
     } else {
