@@ -28,5 +28,17 @@ const settings: {
     canvas_center: { x: window.innerWidth / 2, y: window.innerHeight / 2 }
 }
 export type Settings = typeof settings
-export { Arc, Canvas, canvas_background, distance, EventMap, grid_dots, helper_line_color, Line, mouse, Rect, settings };
+export {
+    Arc,
+    Canvas,
+    canvas_background,
+    distance,
+    EventMap,
+    grid_dots,
+    helper_line_color,
+    Line,
+    mouse,
+    Rect,
+    settings
+};
 
