@@ -19,6 +19,12 @@ export default function EventMap<T extends Event>(parent: Window | HTMLElement, 
 }
 
 export {
-    handleCanvasClick, handleCanvasMouseDown, handleCanvasMouseMove, handleCanvasMouseUp, handleDragObject, handleEscapeKey,
-    handleHotKeyDraw, handleSelectCircle
+    handleCanvasClick,
+    handleCanvasMouseDown,
+    handleCanvasMouseMove,
+    handleCanvasMouseUp,
+    handleDragObject,
+    handleEscapeKey,
+    handleHotKeyDraw,
+    handleSelectCircle
 };
