@@ -1,4 +1,5 @@
 import { action_types, basic_object, tool_types, vec2d } from "../types";
+import Camera from "./Camera";
 import Canvas, { canvas_background, grid_dots, helper_line_color } from "./Canvas";
 import EventMap from "./Events";
 import mouse from "./Mouse";
@@ -29,8 +30,7 @@ const settings: {
 }
 export type Settings = typeof settings
 export {
-    Arc,
-    Canvas,
+    Arc, Camera, Canvas,
     canvas_background,
     distance,
     EventMap,
