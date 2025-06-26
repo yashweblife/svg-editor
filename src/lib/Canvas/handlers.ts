@@ -25,6 +25,23 @@ export function drawMouseTool(c: CanvasRenderingContext2D, mouse: vec2d, setting
   if (dist < 20) {
     mouse.x = window.innerWidth / 2;
     mouse.y = window.innerHeight / 2
+
+  }
+  if (Math.abs(mouse.y - window.innerHeight / 2) < 5) {
+    c.strokeStyle = helper_line_color
+    Canvas.line(c, 0, window.innerHeight / 2, window.innerWidth, window.innerHeight / 2)
+    settings.sticky_point = {
+      x: mouse.x,
+      y: window.innerHeight / 2
+    }
+  }
+  if (Math.abs(mouse.x - window.innerWidth / 2) < 5) {
+    c.strokeStyle = helper_line_color
+    Canvas.line(c, window.innerWidth / 2, 0, window.innerWidth / 2, window.innerHeight)
+    settings.sticky_point = {
+      x: window.innerWidth / 2,
+      y: mouse.y
+    }
   }
   c.beginPath();
   if (settings.current_tool === "circle") {
@@ -110,7 +127,7 @@ export function drawHelperGuides(c: CanvasRenderingContext2D, mouse: vec2d, sett
   }
 }
 
-export function drawPhantomObject(c: CanvasRenderingContext2D, mouse: vec2d,settings: Settings) {
+export function drawPhantomObject(c: CanvasRenderingContext2D, mouse: vec2d, settings: Settings) {
   if (settings.current_action === "draw" && settings.current_object != null) {
     const dist = distance(mouse, settings.current_object);
     c.beginPath();
@@ -120,17 +137,17 @@ export function drawPhantomObject(c: CanvasRenderingContext2D, mouse: vec2d,sett
         break;
       case "rectangle":
         c.rect(
-          settings.current_object.x, 
-          settings.current_object.y, 
-          mouse.x - settings.current_object.x, 
+          settings.current_object.x,
+          settings.current_object.y,
+          mouse.x - settings.current_object.x,
           mouse.y - settings.current_object.y
         );
         break;
       case "line":
         Canvas.manyLine(
-          c, 
-          settings.current_object.x, 
-          settings.current_object.y, 
+          c,
+          settings.current_object.x,
+          settings.current_object.y,
           mouse.x, mouse.y);
         break;
       case "path":
@@ -140,7 +157,7 @@ export function drawPhantomObject(c: CanvasRenderingContext2D, mouse: vec2d,sett
           for (let i = 1; i < settings.current_object.paths.length; i++) {
             c.moveTo(prev.x, prev.y);
             c.lineTo(
-              settings.current_object.paths[i].x, 
+              settings.current_object.paths[i].x,
               settings.current_object.paths[i].y);
             prev = settings.current_object.paths[i];
             c.stroke();
