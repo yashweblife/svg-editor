@@ -136,7 +136,13 @@ export function handleDragObject(e: MouseEvent, mouse: vec2d & { click: boolean 
 }
 export function handleCanvasMouseDown(e: MouseEvent, mouse: vec2d & { click: boolean }) {
   mouse.click = true;
+  if(e.shiftKey){
+    document.body.style.cursor = "grabbing"
+  }
 }
 export function handleCanvasMouseUp(e: MouseEvent, mouse: vec2d & { click: boolean }) {
   mouse.click = false;
+  if(e.shiftKey){
+    document.body.style.cursor = "default"
+  }
 }
