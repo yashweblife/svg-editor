@@ -86,17 +86,27 @@ export class Line {
         const p = Vec.add(a, Vec.scale(ab, barycentric));
         return Vec.distance(point, p);
     }
+    static center(a: vec2d, b: vec2d) {
+        return {
+            x: (a.x + b.x) / 2,
+            y: (a.y + b.y) / 2
+        }
+    }
 }
 export class Rect {
     static containsPoint(point: vec2d, rect: vec2d, size: vec2d) {
         return point.x > rect.x && point.x < rect.x + size.x && point.y > rect.y && point.y < rect.y + size.y;
     }
     static toLines(rect: vec2d, size: vec2d) {
+        const a = { x: rect.x, y: rect.y }
+        const b = { x: rect.x, y: rect.y + size.y }
+        const c = { x: rect.x + size.x, y: rect.y + size.y }
+        const d = { x: rect.x + size.x, y: rect.y }
         return [
-            { a: { x: rect.x, y: rect.y }, b: { x: rect.x + size.x, y: rect.y } },
-            { a: { x: rect.x + size.x, y: rect.y }, b: { x: rect.x + size.x, y: rect.y + size.y } },
-            { a: { x: rect.x + size.x, y: rect.y + size.y }, b: { x: rect.x, y: rect.y + size.y } },
-            { a: { x: rect.x, y: rect.y + size.y }, b: { x: rect.x, y: rect.y } }
+            { a, b },
+            { b, c },
+            { c, d },
+            { d, a }
         ]
     }
     static getCenter(start: vec2d, size: vec2d) {
