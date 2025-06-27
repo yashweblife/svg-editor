@@ -176,20 +176,18 @@ export function drawPhantomObject(c: CanvasRenderingContext2D, mouse: vec2d, set
 }
 export function drawObjects(c: CanvasRenderingContext2D, mouse: vec2d, settings: Settings) {
   if (settings.sticky_point != null) {
-    c.beginPath();
     c.strokeStyle = "rgb(255, 100, 100)"
     Canvas.arc(c, settings.sticky_point.x, settings.sticky_point.y, 5, 0, 2 * Math.PI);
-    c.closePath();
   }
   for (let i = 0; i < settings.objects.length; i++) {
     c.beginPath();
     const o = settings.objects[i];
     switch (o.type) {
       case "circle":
-        c.arc(o.x, o.y, o.r ?? 10, 0, 2 * Math.PI);
+        Canvas.arc(c,o.x, o.y, o.r ?? 10, 0, 2 * Math.PI);
         break;
       case "rectangle":
-        c.rect(o.x, o.y, o.rx - o.x, o.ry - o.y);
+        Canvas.rect(c,o.x, o.y, o.rx - o.x, o.ry - o.y);
         break;
       case "line":
         Canvas.manyLine(c, o.x, o.y, o.rx, o.ry);
