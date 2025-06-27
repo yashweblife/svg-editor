@@ -184,10 +184,10 @@ export function drawObjects(c: CanvasRenderingContext2D, mouse: vec2d, settings:
     const o = settings.objects[i];
     switch (o.type) {
       case "circle":
-        Canvas.arc(c,o.x, o.y, o.r ?? 10, 0, 2 * Math.PI);
+        Canvas.arc(c, o.x, o.y, o.r ?? 10, 0, 2 * Math.PI);
         break;
       case "rectangle":
-        Canvas.rect(c,o.x, o.y, o.rx - o.x, o.ry - o.y);
+        Canvas.rect(c, o.x, o.y, o.rx - o.x, o.ry - o.y);
         break;
       case "line":
         Canvas.manyLine(c, o.x, o.y, o.rx, o.ry);
