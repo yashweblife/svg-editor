@@ -17,19 +17,31 @@ export function drawGrid(c: CanvasRenderingContext2D) {
   }
 }
 
-export function drawMouseTool(c: CanvasRenderingContext2D, mouse: vec2d, settings: Settings) {
+export function drawMouseTool(
+  c: CanvasRenderingContext2D,
+  mouse: vec2d,
+  settings: Settings
+) {
   if (settings.current_action === "none") return
   if (settings.current_tool === "none") return
-  const dist = distance(mouse, { x: window.innerWidth / 2, y: window.innerHeight / 2 });
+  const dist = distance(mouse, {
+    x: window.innerWidth / 2,
+    y: window.innerHeight / 2
+  });
   const pos = { ...mouse }
   if (dist < 20) {
     mouse.x = window.innerWidth / 2;
     mouse.y = window.innerHeight / 2
-
   }
   if (Math.abs(mouse.y - window.innerHeight / 2) < 5) {
     c.strokeStyle = helper_line_color
-    Canvas.line(c, 0, window.innerHeight / 2, window.innerWidth, window.innerHeight / 2)
+    Canvas.line(
+      c,
+      0,
+      window.innerHeight / 2,
+      window.innerWidth,
+      window.innerHeight / 2
+    )
     settings.sticky_point = {
       x: mouse.x,
       y: window.innerHeight / 2
@@ -37,7 +49,13 @@ export function drawMouseTool(c: CanvasRenderingContext2D, mouse: vec2d, setting
   }
   if (Math.abs(mouse.x - window.innerWidth / 2) < 5) {
     c.strokeStyle = helper_line_color
-    Canvas.line(c, window.innerWidth / 2, 0, window.innerWidth / 2, window.innerHeight)
+    Canvas.line(
+      c,
+      window.innerWidth / 2
+      , 0
+      , window.innerWidth / 2
+      , window.innerHeight
+    )
     settings.sticky_point = {
       x: window.innerWidth / 2,
       y: mouse.y
@@ -74,8 +92,15 @@ export function checkMouseOnTop(obj: basic_object, mouse: vec2d) {
   return false
 }
 
-export function drawHelperGuides(c: CanvasRenderingContext2D, mouse: vec2d, settings: Settings) {
-  if (settings.current_action === "draw" && settings.objects.length > 0) {
+export function drawHelperGuides(
+  c: CanvasRenderingContext2D,
+  mouse: vec2d,
+  settings: Settings
+) {
+  if (
+    settings.current_action === "draw" &&
+    settings.objects.length > 0
+  ) {
     let closest_object = settings.objects[0];
     let closest_distance = distance(mouse, closest_object);
     for (let i = 0; i < settings.objects.length; i++) {
@@ -93,7 +118,10 @@ export function drawHelperGuides(c: CanvasRenderingContext2D, mouse: vec2d, sett
     }
     c.beginPath();
     if (closest_object.type === "circle") {
-      if (closest_distance <= closest_object.r! + 20 && closest_distance >= closest_object.r! - 20) {
+      if (
+        closest_distance <= closest_object.r! + 20 &&
+        closest_distance >= closest_object.r! - 20
+      ) {
         const angle = Vec.angle(closest_object, mouse);
         const point = Arc.getPointAtAngle(
           closest_object.x,
@@ -105,7 +133,10 @@ export function drawHelperGuides(c: CanvasRenderingContext2D, mouse: vec2d, sett
         Canvas.arc(c, point.x, point.y, 5, 0, 2 * Math.PI);
       } else {
         settings.sticky_point = null
-        if (settings.current_object != null && settings.current_object.type === "circle" && Math.abs(distance(mouse, settings.current_object) - closest_object.r!) < 10) {
+        if (
+          settings.current_object != null &&
+          settings.current_object.type === "circle" &&
+          Math.abs(distance(mouse, settings.current_object) - closest_object.r!) < 10) {
           const angle = Vec.angle(closest_object, mouse);
           const point = Arc.getPointAtAngle(
             settings.current_object.x,
@@ -114,7 +145,12 @@ export function drawHelperGuides(c: CanvasRenderingContext2D, mouse: vec2d, sett
             angle
           )
           settings.sticky_point = point
-          c.arc(settings.current_object.x, settings.current_object.y, closest_object.r!, 0, 2 * Math.PI);
+          c.arc(
+            settings.current_object.x,
+            settings.current_object.y,
+            closest_object.r!,
+            0,
+            2 * Math.PI);
         }
       }
     }
@@ -127,13 +163,26 @@ export function drawHelperGuides(c: CanvasRenderingContext2D, mouse: vec2d, sett
   }
 }
 
-export function drawPhantomObject(c: CanvasRenderingContext2D, mouse: vec2d, settings: Settings) {
-  if (settings.current_action === "draw" && settings.current_object != null) {
+export function drawPhantomObject(
+  c: CanvasRenderingContext2D,
+  mouse: vec2d,
+  settings: Settings
+) {
+  if (
+    settings.current_action === "draw" &&
+    settings.current_object != null
+  ) {
     const dist = distance(mouse, settings.current_object);
     c.beginPath();
     switch (settings.current_tool) {
       case "circle":
-        c.arc(settings.current_object.x, settings.current_object.y, dist, 0, 2 * Math.PI);
+        c.arc(
+          settings.current_object.x,
+          settings.current_object.y,
+          dist,
+          0,
+          2 * Math.PI
+        );
         break;
       case "rectangle":
         c.rect(
@@ -174,10 +223,20 @@ export function drawPhantomObject(c: CanvasRenderingContext2D, mouse: vec2d, set
     c.closePath();
   }
 }
-export function drawObjects(c: CanvasRenderingContext2D, mouse: vec2d, settings: Settings) {
+export function drawObjects(
+  c: CanvasRenderingContext2D,
+  mouse: vec2d,
+  settings: Settings
+) {
   if (settings.sticky_point != null) {
     c.strokeStyle = "rgb(255, 100, 100)"
-    Canvas.arc(c, settings.sticky_point.x, settings.sticky_point.y, 5, 0, 2 * Math.PI);
+    Canvas.arc(c,
+      settings.sticky_point.x,
+      settings.sticky_point.y,
+      5,
+      0,
+      2 * Math.PI
+    );
   }
   for (let i = 0; i < settings.objects.length; i++) {
     c.beginPath();
