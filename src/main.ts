@@ -1,6 +1,27 @@
-import { Canvas, EventMap, mouse, settings as s } from "./lib";
-import { clearCanvas, drawGrid, drawHelperGuides, drawMouseTool, drawObjects, drawPhantomObject } from "./lib/Canvas";
-import { handleCanvasClick, handleCanvasMouseDown, handleCanvasMouseMove, handleCanvasMouseUp, handleDragObject, handleEscapeKey, handleHotKeyDraw, handleSelectCircle } from "./lib/Events";
+import {
+  Canvas,
+  EventMap,
+  mouse,
+  settings as s
+} from "./lib";
+import {
+  clearCanvas,
+  drawGrid,
+  drawHelperGuides,
+  drawMouseTool,
+  drawObjects,
+  drawPhantomObject
+} from "./lib/Canvas";
+import {
+  handleCanvasClick,
+  handleCanvasMouseDown,
+  handleCanvasMouseMove,
+  handleCanvasMouseUp,
+  handleDragObject,
+  handleEscapeKey,
+  handleHotKeyDraw,
+  handleSelectCircle
+} from "./lib/Events";
 import { resizeWindow } from "./lib/Events/handlers";
 import "./styles/common.css";
 
