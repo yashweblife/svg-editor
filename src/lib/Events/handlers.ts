@@ -54,9 +54,15 @@ export function handleCanvasClick(e: MouseEvent, settings: Settings) {
           type: settings.current_tool
         }
       } else {
-        settings.current_object.rx = e.offsetX;
-        settings.current_object.ry = e.offsetY;
-        settings.current_object.r = distance({ x: settings.current_object.x, y: settings.current_object.y }, { x: settings.current_object.rx, y: settings.current_object.ry });
+        settings.current_object.rx = settings.sticky_point ? settings.sticky_point.x : e.offsetX;
+        settings.current_object.ry = settings.sticky_point ? settings.sticky_point.y : e.offsetY;
+        settings.current_object.r = distance({
+          x: settings.current_object.x,
+          y: settings.current_object.y
+        }, {
+          x: settings.current_object.rx,
+          y: settings.current_object.ry
+        });
         settings.objects.push(settings.current_object);
         settings.current_object = null;
         settings.current_action = "none";
