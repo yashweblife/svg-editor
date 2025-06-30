@@ -7,6 +7,8 @@ export function handleSelectCircle(settings: Settings) {
 }
 export function handleCanvasClick(e: MouseEvent, settings: Settings) {
   if (settings.current_action === "draw" && settings.current_tool !== "none") {
+    const x = settings.sticky_point ? settings.sticky_point.x : e.offsetX;
+    const y = settings.sticky_point ? settings.sticky_point.y : e.offsetY;
     if (settings.current_tool === "path") {
       if (settings.current_object == null) {
         settings.current_object = {
@@ -15,8 +17,8 @@ export function handleCanvasClick(e: MouseEvent, settings: Settings) {
           rx: 0,
           ry: 0,
           paths: [{
-            x: settings.sticky_point ? settings.sticky_point.x : e.offsetX,
-            y: settings.sticky_point ? settings.sticky_point.y : e.offsetY
+            x: x,
+            y: y
           }],
           type: settings.current_tool
         }
@@ -24,8 +26,8 @@ export function handleCanvasClick(e: MouseEvent, settings: Settings) {
       }
       if (settings.current_object.paths) {
         let pointB = {
-          x: settings.sticky_point ? settings.sticky_point.x : e.offsetX,
-          y: settings.sticky_point ? settings.sticky_point.y : e.offsetY
+          x: x,
+          y: y
         };
         if (settings.current_object.paths.length > 1) {
           let pointA = settings.current_object.paths[0];
@@ -47,15 +49,15 @@ export function handleCanvasClick(e: MouseEvent, settings: Settings) {
     } else {
       if (settings.current_object == null) {
         settings.current_object = {
-          x: settings.sticky_point ? settings.sticky_point.x : e.offsetX,
-          y: settings.sticky_point ? settings.sticky_point.y : e.offsetY,
+          x: x,
+          y: y,
           rx: 0,
           ry: 0,
           type: settings.current_tool
         }
       } else {
-        settings.current_object.rx = settings.sticky_point ? settings.sticky_point.x : e.offsetX;
-        settings.current_object.ry = settings.sticky_point ? settings.sticky_point.y : e.offsetY;
+        settings.current_object.rx = x;
+        settings.current_object.ry = y;
         settings.current_object.r = distance({
           x: settings.current_object.x,
           y: settings.current_object.y
