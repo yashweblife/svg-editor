@@ -14,13 +14,19 @@ export function handleCanvasClick(e: MouseEvent, settings: Settings) {
           y: 0,
           rx: 0,
           ry: 0,
-          paths: [{ x: e.offsetX, y: e.offsetY }],
+          paths: [{
+            x: settings.sticky_point ? settings.sticky_point.x : e.offsetX,
+            y: settings.sticky_point ? settings.sticky_point.y : e.offsetY
+          }],
           type: settings.current_tool
         }
         return
       }
       if (settings.current_object.paths) {
-        let pointB = { x: e.offsetX, y: e.offsetY };
+        let pointB = {
+          x: settings.sticky_point ? settings.sticky_point.x : e.offsetX,
+          y: settings.sticky_point ? settings.sticky_point.y : e.offsetY
+        };
         if (settings.current_object.paths.length > 1) {
           let pointA = settings.current_object.paths[0];
           const dist = distance(pointB, pointA);
@@ -136,13 +142,13 @@ export function handleDragObject(e: MouseEvent, mouse: vec2d & { click: boolean 
 }
 export function handleCanvasMouseDown(e: MouseEvent, mouse: vec2d & { click: boolean }) {
   mouse.click = true;
-  if(e.shiftKey){
+  if (e.shiftKey) {
     document.body.style.cursor = "grabbing"
   }
 }
 export function handleCanvasMouseUp(e: MouseEvent, mouse: vec2d & { click: boolean }) {
   mouse.click = false;
-  if(e.shiftKey){
+  if (e.shiftKey) {
     document.body.style.cursor = "default"
   }
 }
