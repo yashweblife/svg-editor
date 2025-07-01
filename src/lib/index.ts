@@ -3,7 +3,7 @@ import Camera from "./Camera";
 import Canvas, { canvas_background, grid_dots, helper_line_color } from "./Canvas";
 import EventMap from "./Events";
 import mouse from "./Mouse";
-import { Arc, Line, Rect } from "./Vector";
+import { Arc, Line, Path, Rect } from "./Vector";
 
 function distance(a: vec2d, b: vec2d) {
     return Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
@@ -30,15 +30,13 @@ const settings: {
 }
 export type Settings = typeof settings
 export {
-    Arc, Camera, Canvas,
-    canvas_background,
+    Arc, Camera, Canvas, canvas_background,
     distance,
     EventMap,
     grid_dots,
     helper_line_color,
     Line,
-    mouse,
-    Rect,
+    mouse, Path, Rect,
     settings
 };
 
