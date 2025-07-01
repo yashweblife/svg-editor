@@ -2,7 +2,7 @@ import Canvas, { grid_dots, helper_line_color } from ".";
 import { Arc, distance, Settings } from "..";
 import { basic_object, vec2d } from "../../types";
 import { rectangleFromCenter } from "../helpers";
-import Vec from "../Vector";
+import Vec, { Path } from "../Vector";
 export function clearCanvas(c: CanvasRenderingContext2D) {
   Canvas.fillCanvas(c);
 }
@@ -89,6 +89,9 @@ export function checkMouseOnTop(obj: basic_object, mouse: vec2d) {
       return true
     }
   }
+  else if(obj.type === "path"){
+    return Path.isPointInPolygon(mouse,obj.paths!)
+  }
   return false
 }
 
@@ -103,12 +106,16 @@ export function drawHelperGuides(
   ) {
     let closest_object = settings.objects[0];
     let closest_distance = distance(mouse, closest_object);
+    const x = settings.objects[0].x;
+    const y = settings.objects[0].y;
+    const rx = settings.objects[0].rx;
+    const ry = settings.objects[0].ry;
     for (let i = 0; i < settings.objects.length; i++) {
       let b = {
-        x: settings.objects[i].x,
-        y: settings.objects[i].y,
-        rx: settings.objects[i].rx,
-        ry: settings.objects[i].ry
+        x,
+        y,
+        rx,
+        ry
       };
       let distance1 = distance(mouse, b);
       if (distance1 < closest_distance) {
@@ -156,6 +163,9 @@ export function drawHelperGuides(
     }
     else if (closest_object.type === "line") {
 
+    }
+    else if (closest_object.type === "rectangle") {
+      
     }
     c.strokeStyle = helper_line_color;
     c.stroke();
@@ -257,6 +267,7 @@ export function drawObjects(
           continue;
         }
         Canvas.path(c, points);
+
         break;
     }
     if (checkMouseOnTop(o, mouse)) {
