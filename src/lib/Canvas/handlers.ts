@@ -2,7 +2,7 @@ import Canvas, { grid_dots, helper_line_color } from ".";
 import { Arc, distance, Settings } from "..";
 import { basic_object, vec2d } from "../../types";
 import { rectangleFromCenter } from "../helpers";
-import Vec, { Path } from "../Vector";
+import Vec, { Path, Rect } from "../Vector";
 export function clearCanvas(c: CanvasRenderingContext2D) {
   Canvas.fillCanvas(c);
 }
@@ -88,6 +88,9 @@ export function checkMouseOnTop(obj: basic_object, mouse: vec2d) {
     if (dist < rad + 10) {
       return true
     }
+  }
+  else if (obj.type === "rectangle") {
+    Rect.containsPoint(mouse, {x:obj.x, y:obj.y}, {x:obj.rx, y:obj.ry});
   }
   else if(obj.type === "path"){
     return Path.isPointInPolygon(mouse,obj.paths!)
