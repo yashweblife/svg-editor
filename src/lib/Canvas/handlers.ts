@@ -229,7 +229,10 @@ export function drawPhantomObject(
         if (settings.current_object.paths) {
           let prev = settings.current_object.paths[0];
           c.beginPath();
-          for (let i = 1; i < settings.current_object.paths.length; i++) {
+          for (let i = 1; i < settings
+            .current_object
+            .paths
+            .length; i++) {
             c.moveTo(prev.x, prev.y);
             c.lineTo(
               settings.current_object.paths[i].x,
@@ -237,7 +240,9 @@ export function drawPhantomObject(
             prev = settings.current_object.paths[i];
             c.stroke();
           }
-          let p = settings.current_object.paths[settings.current_object.paths.length - 1]
+          let p = settings
+            .current_object
+            .paths[settings.current_object.paths.length - 1]
           c.moveTo(p.x, p.y);
           c.lineTo(mouse.x, mouse.y);
           c.stroke();
