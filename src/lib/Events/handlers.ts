@@ -5,7 +5,10 @@ export function handleSelectCircle(settings: Settings) {
   settings.current_tool = "circle";
   settings.current_action = "draw";
 }
-export function handleCanvasClick(e: MouseEvent, settings: Settings) {
+export function handleCanvasClick(
+  e: MouseEvent,
+  settings: Settings
+) {
   if (settings.current_action === "draw" && settings.current_tool !== "none") {
     const x = settings.sticky_point ? settings.sticky_point.x : e.offsetX;
     const y = settings.sticky_point ? settings.sticky_point.y : e.offsetY;
@@ -119,7 +122,11 @@ export function handleHotKeyDraw(e: KeyboardEvent, settings: Settings) {
     settings.objects.pop();
   }
 }
-export function handleCanvasMouseMove(e: MouseEvent, mouse: vec2d, settings: Settings) {
+export function handleCanvasMouseMove(
+  e: MouseEvent,
+  mouse: vec2d,
+  settings: Settings
+) {
   mouse.x = e.offsetX;
   mouse.y = e.offsetY;
   if (distance(mouse, settings.canvas_center) < 10) {
@@ -131,7 +138,12 @@ export function handleCanvasMouseMove(e: MouseEvent, mouse: vec2d, settings: Set
     let closest_object = settings.objects[0];
     let closest_distance = distance(mouse, closest_object);
     for (let i = 0; i < settings.objects.length; i++) {
-      let b = { x: settings.objects[i].x, y: settings.objects[i].y, rx: settings.objects[i].rx, ry: settings.objects[i].ry };
+      let b = {
+        x: settings.objects[i].x,
+        y: settings.objects[i].y,
+        rx: settings.objects[i].rx,
+        ry: settings.objects[i].ry
+      };
       let distance1 = distance(mouse, b);
       if (distance1 < closest_distance) {
         closest_distance = distance1;
@@ -141,20 +153,29 @@ export function handleCanvasMouseMove(e: MouseEvent, mouse: vec2d, settings: Set
   }
 }
 
-export function handleDragObject(e: MouseEvent, mouse: vec2d & { click: boolean }, settings: Settings) {
+export function handleDragObject(
+  e: MouseEvent,
+  mouse: vec2d & { click: boolean },
+  settings: Settings
+) {
   if (!mouse.click) return
   if (settings.selected_object != null) {
     settings.selected_object.x = settings.sticky_point ? settings.sticky_point.x : e.offsetX;
     settings.selected_object.y = settings.sticky_point ? settings.sticky_point.y : e.offsetY;
   }
 }
-export function handleCanvasMouseDown(e: MouseEvent, mouse: vec2d & { click: boolean }) {
+export function handleCanvasMouseDown(
+  e: MouseEvent,
+  mouse: vec2d & { click: boolean }) {
   mouse.click = true;
   if (e.shiftKey) {
     document.body.style.cursor = "grabbing"
   }
 }
-export function handleCanvasMouseUp(e: MouseEvent, mouse: vec2d & { click: boolean }) {
+export function handleCanvasMouseUp(
+  e: MouseEvent,
+  mouse: vec2d & { click: boolean }
+) {
   mouse.click = false;
   if (e.shiftKey) {
     document.body.style.cursor = "default"
