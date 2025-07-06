@@ -13,13 +13,26 @@ import {
     drawPhantomObject
 } from "./handlers";
 export default class Canvas {
-    static arc(c: CanvasRenderingContext2D, x: number, y: number, r: number, startAngle: number, endAngle: number) {
+    static arc(
+        c: CanvasRenderingContext2D,
+        x: number,
+        y: number,
+        r: number,
+        startAngle: number,
+        endAngle: number
+    ) {
         c.beginPath();
         c.arc(x, y, r, startAngle, endAngle);
         c.stroke();
         c.closePath();
     }
-    static rect(c: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) {
+    static rect(
+        c: CanvasRenderingContext2D,
+        x: number,
+        y: number,
+        w: number,
+        h: number
+    ) {
         c.beginPath();
         c.rect(x, y, w, h);
         c.stroke();
@@ -33,14 +46,31 @@ export default class Canvas {
             prev = points[i];
         }
     }
-    static manyArc(c: CanvasRenderingContext2D, x: number, y: number, r: number) {
+    static manyArc(
+        c: CanvasRenderingContext2D,
+        x: number,
+        y: number,
+        r: number
+    ) {
         c.arc(x, y, r, 0, 2 * Math.PI);
     }
-    static manyLine(c: CanvasRenderingContext2D, x1: number, y1: number, x2: number, y2: number) {
+    static manyLine(
+        c: CanvasRenderingContext2D,
+        x1: number,
+        y1: number,
+        x2: number,
+        y2: number
+    ) {
         c.moveTo(x1, y1);
         c.lineTo(x2, y2);
     }
-    static manyRect(c: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) {
+    static manyRect(
+        c: CanvasRenderingContext2D,
+        x: number,
+        y: number,
+        w: number,
+        h: number
+    ) {
         c.rect(x, y, w, h);
     }
     static stroke(c: CanvasRenderingContext2D) {
@@ -49,14 +79,28 @@ export default class Canvas {
     static fill(c: CanvasRenderingContext2D) {
         c.fill();
     }
-    static clear(c: CanvasRenderingContext2D, x: number = 0, y: number = 0, w: number = window.innerWidth, h: number = window.innerHeight) {
+    static clear(
+        c: CanvasRenderingContext2D,
+        x: number = 0,
+        y: number = 0,
+        w: number = window.innerWidth,
+        h: number = window.innerHeight
+    ) {
         c.clearRect(x, y, w, h);
     }
-    static fillCanvas(c: CanvasRenderingContext2D, w: number = window.innerWidth, h: number = window.innerHeight) {
+    static fillCanvas(
+        c: CanvasRenderingContext2D,
+        w: number = window.innerWidth,
+        h: number = window.innerHeight
+    ) {
         c.fillStyle = canvas_background;
         c.fillRect(0, 0, w, h);
     }
-    static drawOrigin(c: CanvasRenderingContext2D, x: number = window.innerWidth / 2, y: number = window.innerHeight / 2) {
+    static drawOrigin(
+        c: CanvasRenderingContext2D,
+        x: number = window.innerWidth / 2,
+        y: number = window.innerHeight / 2
+    ) {
         c.beginPath();
         c.moveTo(x, 0);
         c.lineTo(x, window.innerHeight);
@@ -65,7 +109,13 @@ export default class Canvas {
         c.stroke();
         c.closePath();
     }
-    static line(c: CanvasRenderingContext2D, x1: number, y1: number, x2: number, y2: number) {
+    static line(
+        c: CanvasRenderingContext2D,
+        x1: number,
+        y1: number,
+        x2: number,
+        y2: number
+    ) {
         c.beginPath();
         c.moveTo(x1, y1);
         c.lineTo(x2, y2);
