@@ -141,19 +141,19 @@ export class Arc {
 }
 export class Path {
     static isPointInPolygon(point: vec2d, polygon: vec2d[]): boolean {
-    let inside = false;
-    const { x, y } = point;
-    const n = polygon.length;
+        let inside = false;
+        const { x, y } = point;
+        const n = polygon.length;
 
-    for (let i = 0, j = n - 1; i < n; j = i++) {
-        const xi = polygon[i].x, yi = polygon[i].y;
-        const xj = polygon[j].x, yj = polygon[j].y;
+        for (let i = 0, j = n - 1; i < n; j = i++) {
+            const xi = polygon[i].x, yi = polygon[i].y;
+            const xj = polygon[j].x, yj = polygon[j].y;
 
-        const intersect = ((yi > y) !== (yj > y)) &&
-            (x < ((xj - xi) * (y - yi)) / (yj - yi + 0.0000001) + xi);
+            const intersect = ((yi > y) !== (yj > y)) &&
+                (x < ((xj - xi) * (y - yi)) / (yj - yi + 0.0000001) + xi);
 
-        if (intersect) inside = !inside;
+            if (intersect) inside = !inside;
+        }
+        return inside;
     }
-    return inside;
-}
 }
