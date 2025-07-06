@@ -170,6 +170,19 @@ export function drawHelperGuides(
     else if (closest_object.type === "rectangle") {
       
     }
+    else if(closest_object.type === "path"){
+      let closest_point = settings.objects[0].paths![0];
+      let closest_distance = distance(mouse, closest_point);
+      for (let i = 0; i < settings.objects[0].paths!.length; i++) {
+        let b = settings.objects[0].paths![i];
+        let distance1 = distance(mouse, b);
+        if (distance1 < closest_distance) {
+          closest_distance = distance1;
+          closest_point = b;
+        }
+      }
+      settings.sticky_point = closest_point
+    }
     c.strokeStyle = helper_line_color;
     c.stroke();
     c.closePath();
