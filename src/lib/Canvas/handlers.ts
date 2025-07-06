@@ -90,10 +90,10 @@ export function checkMouseOnTop(obj: basic_object, mouse: vec2d) {
     }
   }
   else if (obj.type === "rectangle") {
-    Rect.containsPoint(mouse, {x:obj.x, y:obj.y}, {x:obj.rx, y:obj.ry});
+    Rect.containsPoint(mouse, { x: obj.x, y: obj.y }, { x: obj.rx, y: obj.ry });
   }
-  else if(obj.type === "path"){
-    return Path.isPointInPolygon(mouse,obj.paths!)
+  else if (obj.type === "path") {
+    return Path.isPointInPolygon(mouse, obj.paths!)
   }
   return false
 }
@@ -168,9 +168,9 @@ export function drawHelperGuides(
 
     }
     else if (closest_object.type === "rectangle") {
-      
+
     }
-    else if(closest_object.type === "path"){
+    else if (closest_object.type === "path") {
       let closest_point = settings.objects[0].paths![0];
       let closest_distance = distance(mouse, closest_point);
       for (let i = 0; i < settings.objects[0].paths!.length; i++) {
